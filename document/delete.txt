@@ -1,0 +1,16 @@
+/******** Có 2 trường hợp không được phép xóa ********/
+ * 1. Xóa superadmin
+ * 2. Đăng nhập không phải là super admin mà lại đi xóa 1 admin 
+ **/
+
+/***************** Chú thích : *****************/
+Superadmin : $id == 1
+Đăng nhập không phải là superadmin : Auth::user()->id != 1
+Admin : $data["level"] == 1
+
+
+/***************** Code *****************/
+$id == 1
+Auth::user()->id != 1 && $data["level"]
+
+=> ($id == 1) || (Auth::user()->id != 1 && $data["level"])

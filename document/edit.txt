@@ -1,0 +1,23 @@
+/***************** Kiểm soát phép sửa *****************/
+ * Có 2 trường hợp cấm sửa
+ * 1. Đăng nhập là admin thường mà sửa super
+ * 2. Đăng nhập là admin thường mà sửa admin mà admin đó không phải là chính mình
+
+/***************** Chú thích : *****************/
+Đăng nhập là admin thường : Auth::user()->id != 1
+Superadmin : $id == 1
+Admin : $data["level"] == 1
+
+/***************** Thế nào là sửa chính mình *****************/
+$edit_myself = null;
+if (Auth::user()->id == $id) {
+    $edit_myself = true;
+} else {
+    $edit_myself = false;
+}
+
+/***************** Code *****************/
+Auth::user()->id != 1 && $id == 1
+Auth::user()->id != 1 && ($data["level"] == 1 && $edit_myself == false)
+
+Auth::user()->id != 1 && ($id == 1 || ($data["level"] == 1 && $edit_myself == false))
