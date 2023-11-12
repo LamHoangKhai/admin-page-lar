@@ -49,15 +49,29 @@
                                 @endif
                             </div>
 
-                            <div class="form-group">
-                                <label>Price</label>
-                                <input type="number" class="form-control" placeholder="Enter product price"
-                                    name="price" value="{{ old('price') }}">
-                                @if ($errors->has('price'))
-                                    <p class="invalid-feedback" style="display: block">*
-                                        {{ $errors->get('price')[0] }}
-                                    <p>
-                                @endif
+                            <div class="form-group inline">
+                                <div class="w-50 margin-right-4">
+                                    <label>Price</label>
+                                    <input type="number" class="form-control" placeholder="Enter product price"
+                                        name="price" value="{{ old('price') }}">
+                                    @if ($errors->has('price'))
+                                        <p class="invalid-feedback" style="display: block">*
+                                            {{ $errors->get('price')[0] }}
+                                        <p>
+                                    @endif
+                                </div>
+
+                                <div class="w-50">
+                                    <label>Categories</label>
+                                    <select name="category_id" class="form-control">
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                             </div>
 
                             <div class="form-group inline">
@@ -85,16 +99,7 @@
 
                             </div>
 
-                            <div class="form-group">
-                                <label>Categories</label>
-                                <select name="category_id" class="form-control">
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}"
-                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                            {{ $category->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+
 
                             <div class="form-group">
                                 <label>Description</label>

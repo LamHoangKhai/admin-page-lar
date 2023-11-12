@@ -84,7 +84,6 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     @foreach ($categories as $category)
                         <tr>

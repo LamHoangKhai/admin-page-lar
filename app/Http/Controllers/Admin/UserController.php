@@ -36,7 +36,7 @@ class UserController extends Controller
             "full_name" => $request->full_name,
             "status" => $request->status,
         ]);
-        return redirect()->route("admin.user.index")->with("success", "");
+        return redirect()->route("admin.user.index")->with("success", "Create user success");
     }
 
     /**
@@ -61,7 +61,7 @@ class UserController extends Controller
      */
     public function update(UpdateRequest $request, string $id)
     {
-        
+
         $dataCurrent = User::find($id);
         $data = [
             "full_name" => $request->full_name,
@@ -83,7 +83,7 @@ class UserController extends Controller
         }
 
         $dataCurrent->update($data);
-        return redirect()->route("admin.user.index")->with("success", "");
+        return redirect()->route("admin.user.index")->with("success", "Update user success");
     }
 
     /**
@@ -93,6 +93,6 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->delete();
-        return redirect()->route("admin.user.index")->with("success", "");
+        return redirect()->route("admin.user.index")->with("success", "Delete user success");
     }
 }

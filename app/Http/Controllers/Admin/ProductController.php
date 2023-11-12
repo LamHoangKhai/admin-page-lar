@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\Product\StoreRequest;
 use App\Http\Requests\Admin\Product\UpdateRequest;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\User;
 
 class ProductController extends Controller
 {
@@ -33,6 +34,8 @@ class ProductController extends Controller
         $image->move(public_path("uploads"), $filename);
 
 
+        $users = User::all();
+
         Product::create([
             "name" => $request->name,
             "price" => $request->price,
@@ -41,10 +44,10 @@ class ProductController extends Controller
             "status" => $request->status,
             "featured" => $request->featured,
             "category_id" => $request->category_id,
-            "user_id" => 1,
+            "user_id" => $users[0]->id,
             "image" => $filename
         ]);
-        return redirect()->route('admin.product.index')->with('success', "thành công");
+        return redirect()->route('admin.product.index')->with('success', "Create product success");
     }
     /**
      * Display the specified resource.
@@ -101,7 +104,7 @@ class ProductController extends Controller
         $dataCurrent->update($data);
 
 
-        return redirect()->route('admin.product.index')->with('success', "thành công");
+        return redirect()->route('admin.product.index')->with('success', "Update product success");
     }
 
     /**
@@ -117,6 +120,6 @@ class ProductController extends Controller
         }
 
         $product->delete();
-        return redirect()->route('admin.product.index')->with('success', '');
+        return redirect()->route('admin.product.index')->with('success', 'Delete product success');
     }
 }

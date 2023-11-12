@@ -22,8 +22,45 @@
 
             <!-- Main content -->
             <section class="content">
+                @if (Session::has('success'))
+                    @push('handlejs')
+                        <script>
+                            $(function() {
+                                var Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                });
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: '{{ Session::get('success') }}'
+                                })
+                            })
+                        </script>
+                    @endpush
+                @endif
 
-
+                @if ($errors->any())
+                    @push('handlejs')
+                        <script>
+                            $(function() {
+                                var Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                });
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: 'Action fail'
+                                })
+                            })
+                        </script>
+                    @endpush
+                @endif
                 @yield('content')
             </section>
             <!-- /.content -->

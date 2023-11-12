@@ -63,10 +63,28 @@
                                 value="{{ old('name', $data->name) }}">
                         </div>
 
-                        <div class="form-group">
-                            <label>Price</label>
-                            <input type="text" class="form-control" placeholder="Enter product price" name="price"
-                                value="{{ old('price', $data->price) }}">
+                        <div class="form-group inline">
+                            <div class="w-50 margin-right-4">
+                                <label>Price</label>
+                                <input type="number" class="form-control" placeholder="Enter product price" name="price"
+                                    value="{{ old('price', $data->price) }}">
+                                @if ($errors->has('price'))
+                                    <p class="invalid-feedback" style="display: block">*
+                                        {{ $errors->get('price')[0] }}
+                                    <p>
+                                @endif
+                            </div>
+
+                            <div class="w-50">
+                                <label>Categories</label>
+                                <select name="category_id" class="form-control">
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
                         <div class="form-group inline">
@@ -76,14 +94,14 @@
                                     <option value="1"
                                         {{ old('status', $data->status) == 1
                                             ? 'selected
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        selected'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                selected'
                                             : '' }}>
                                         Show
                                     </option>
                                     <option value="2"
                                         {{ old('status', $data->status) == 2
                                             ? 'selected
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        selected'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                selected'
                                             : '' }}">
                                         Hidden
                                     </option>
@@ -96,30 +114,21 @@
                                     <option value="1"
                                         {{ old('featured', $data->featured) == 1
                                             ? 'selected
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        selected'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                selected'
                                             : '' }}>
                                         Featured
                                     </option>
                                     <option
                                         value="2"{{ old('featured', $data->featured) == 2
                                             ? 'selected
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        selected'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                selected'
                                             : '' }}>
                                         UnFeatured
                                     </option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Categories</label>
-                            <select name="category_id" class="form-control">
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}"
-                                        {{ old('category_id', $data->category_id) == $category->id ? 'selected' : '' }}>
-                                        {{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+
 
                         <div class="form-group">
                             <label>Description</label>

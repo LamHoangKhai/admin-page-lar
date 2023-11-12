@@ -34,7 +34,8 @@ class CategoryController extends Controller
             "name" => $request->name,
             "status" => $request->status,
         ]);
-        return redirect()->route('admin.category.index')->with('success', "thành công");
+
+        return redirect()->route('admin.category.index')->with('success', "Create category success");
     }
 
     /**
@@ -66,7 +67,7 @@ class CategoryController extends Controller
             "status" => $request->status,
         ];
         $dataCurrent->update($data);
-        return redirect()->route("admin.category.index")->with("success", "");
+        return redirect()->route("admin.category.index")->with("success", "Update category success");
     }
 
     /**
@@ -76,7 +77,7 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
         $category->delete();
-        return redirect()->route("admin.category.index")->with("success", "");
+        return redirect()->route("admin.category.index")->with("success", "Delete category success");
 
     }
 }

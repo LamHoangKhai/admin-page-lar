@@ -16,7 +16,6 @@ return new class extends Migration {
             $table->datetime('cart_date');
             $table->tinyInteger('status');
             $table->string('user_id', 36);
-
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->integer('price');
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
-            $table->string('user_id', 36);
+            $table->unsignedBigInteger('cart_id');
             $table->foreign('cart_id')->references('id')->on('carts');
             $table->timestamps();
         });
