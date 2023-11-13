@@ -3,7 +3,7 @@
 <!-- Bootstrap 4 -->
 <script src="{{ asset('administrator/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('administrator/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-
+<script src="{{ asset('administrator/custom/js/alert-confirm.js') }}"></script>
 
 @stack('js')
 

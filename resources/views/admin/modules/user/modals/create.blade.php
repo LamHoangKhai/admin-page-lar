@@ -38,7 +38,7 @@
                             <div class="form-group">
                                 <label>Full Name</label>
                                 <input type="text" class="form-control" placeholder="Enter full name"
-                                    name="full_name" value={{ old('full_name') }}>
+                                    name="full_name" value="{{ old('full_name') }}">
                                 @if ($errors->has('full_name'))
                                     <p class="invalid-feedback" style="display: block">*
                                         {{ $errors->get('full_name')[0] }}

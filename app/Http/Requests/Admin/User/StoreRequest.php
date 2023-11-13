@@ -22,7 +22,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "email" => "required|unique:users,email",
+            "email" => "required|unique:users,email|email",
             "password" => "required|min:6",
             "confirmation_password" => "required|same:password",
             "phone" => "required"

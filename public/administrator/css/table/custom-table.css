@@ -1,9 +1,0 @@
-.flex {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-}
-
-td {
-    vertical-align: middle !important;
-}
