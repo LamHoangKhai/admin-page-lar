@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class CrawController extends Controller
 {
+    public $count = 0;
     public function index()
     {
         $context = stream_context_create(
@@ -16,18 +17,24 @@ class CrawController extends Controller
             )
         );
 
-        for ($i = 1; $i <= 47; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             $html = file_get_html("https://phongvu.vn/c/do-gia-dung-thiet-bi-gia-dinh?page=$i", false, $context);
 
             foreach ($html->find('.product-card ') as $key => $value) {
-                $image = $value->find(".css-1uzm8bv img")[0]->attr["src"];
+                // craw data
+                $imageURL = $value->find(".css-1uzm8bv img")[0]->attr["src"];
                 $name = $value->find(".att-product-card-title h3")[0]->innertext;
+                $file_name_image = $this->slugify($name) . ".jpg";
+                $price = $this->formatPrice($value->find('div[type="subtitle"]')[0]->innertext);
+
+                // insert data
                 $product = new CrawData();
                 $product->name = $name;
-                $product->image = $this->slugify($name) . ".jpg";
-                $product->price = $this->formatPrice($value->find('div[type="subtitle"]')[0]->innertext);
+                $product->image = $file_name_image;
+                $product->price = $price;
                 $product->save();
-                $this->download_file($image, public_path('/uploads/' . $this->slugify($name) . ".jpg"));
+
+                $this->download_file($imageURL, public_path('/uploads/' . $this->slugify($name) . ".jpg"));
             }
 
             sleep(5);
@@ -60,7 +67,12 @@ class CrawController extends Controller
 
     public function download_file($file_url, $file_name)
     {
+        $time_start = microtime(true);
         file_put_contents($file_name, file_get_contents($file_url));
+        $this->count++;
+        $time_end = microtime(true);
+        $total_time = $time_end - $time_start;
+        echo $this->count, "------>", $total_time, "<br/>";
     }
 
 }
