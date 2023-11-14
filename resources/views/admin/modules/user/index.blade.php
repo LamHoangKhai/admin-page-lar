@@ -91,7 +91,7 @@
                                 <div class="flex">
                                     <a href="{{ route('admin.user.edit', ['id' => $user->id]) }}"
                                         class="text-dark btn btn-warning">Edit</a>
-                                    <a href="{{ route('admin.user.destroy', ['id' => $user->id]) }}"
+                                    <a data-url="{{ route('admin.user.destroy', ['id' => $user->id]) }}"
                                         class="text-white btn btn-danger confirm" value="{{ $user->email }}">Delete</a>
                                 </div>
 

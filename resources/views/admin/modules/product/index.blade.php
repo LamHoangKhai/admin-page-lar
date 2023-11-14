@@ -110,7 +110,7 @@
 
                                     <a href="{{ route('admin.product.edit', ['id' => $product->id]) }}"
                                         class="text-dark btn btn-warning ">Edit</a>
-                                    <a href="{{ route('admin.product.destroy', ['id' => $product->id]) }}"
+                                    <a data-url="{{ route('admin.product.destroy', ['id' => $product->id]) }}"
                                         class="text-white confirm btn btn-danger" value="{{ $product->name }}">Delete</a>
                                 </div>
                             </td>

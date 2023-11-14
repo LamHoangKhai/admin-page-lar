@@ -85,7 +85,7 @@
                                 <div class="flex">
                                     <a href="{{ route('admin.category.edit', ['id' => $category->id]) }}"
                                         class="text-dark btn btn-warning ">Edit</a>
-                                    <a href="{{ route('admin.category.destroy', ['id' => $category->id]) }}"
+                                    <a data-url="{{ route('admin.category.destroy', ['id' => $category->id]) }}"
                                         class="text-white confirm btn btn-danger" value="{{ $category->name }}">Delete</a>
                                 </div>
                             </td>

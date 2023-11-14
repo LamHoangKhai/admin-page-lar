@@ -1,9 +1,9 @@
 <!-- jQuery -->
 <script src="{{ asset('administrator/plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap 4 -->
-<script src="{{ asset('administrator/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('administrator/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-<script src="{{ asset('administrator/custom/js/alert-confirm.js') }}"></script>
+<script src="{{ asset('administrator/plugins/bootstrap/js/bootstrap.bundle.min.js') }}" defer></script>
+<script src="{{ asset('administrator/plugins/sweetalert2/sweetalert2.min.js') }}" defer></script>
+<script src="{{ asset('administrator/custom/js/alert-confirm.js') }}" defer></script>
 
 @stack('js')
 

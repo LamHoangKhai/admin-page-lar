@@ -1,7 +1,7 @@
 // modal confirm delete user
 $(".confirm").click(async (e) => {
     e.preventDefault();
-    const url = e.target.href;
+    const url = e.target.getAttribute("data-url");
     const name = e.target.getAttribute("value");
     // show modal
     await Swal.fire({
