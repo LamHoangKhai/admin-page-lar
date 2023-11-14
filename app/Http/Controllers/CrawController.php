@@ -10,13 +10,15 @@ class CrawController extends Controller
     public $count = 0;
     public function index()
     {
+
+
         $context = stream_context_create(
             array(
-                "http" =>
-                    array("header" => "User-Agent:Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36")
+                "http" => array(
+                    "header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+                )
             )
         );
-
         for ($i = 1; $i <= 47; $i++) {
 
             try {
@@ -37,23 +39,21 @@ class CrawController extends Controller
                         $product->price = $price;
                         $product->save();
 
-                        $this->download_file($imageURL, public_path('/uploads/' . $this->slugify($name) . ".jpg"));
+                        $this->download_file($imageURL, public_path('/uploads/' . $this->slugify($$file_name_image)));
                     } catch (\Exception $e) {
                         echo $e->getMessage();
                         continue;
                     }
                 }
-
-
             } catch (\Exception $e) {
                 echo $e->getMessage();
                 continue;
             }
 
-
             sleep(5);
         }
-        echo "Craw thành công";
+
+        echo "Craw success";
     }
 
     public function formatPrice($data)
