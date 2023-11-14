@@ -17,25 +17,39 @@ class CrawController extends Controller
             )
         );
 
-        for ($i = 1; $i <= 3; $i++) {
-            $html = file_get_html("https://phongvu.vn/c/do-gia-dung-thiet-bi-gia-dinh?page=$i", false, $context);
+        for ($i = 1; $i <= 47; $i++) {
 
-            foreach ($html->find('.product-card ') as $key => $value) {
-                // craw data
-                $imageURL = $value->find(".css-1uzm8bv img")[0]->attr["src"];
-                $name = $value->find(".att-product-card-title h3")[0]->innertext;
-                $file_name_image = $this->slugify($name) . ".jpg";
-                $price = $this->formatPrice($value->find('div[type="subtitle"]')[0]->innertext);
+            try {
+                $html = file_get_html("https://phongvu.vn/c/do-gia-dung-thiet-bi-gia-dinh?page=$i", false, $context);
 
-                // insert data
-                $product = new CrawData();
-                $product->name = $name;
-                $product->image = $file_name_image;
-                $product->price = $price;
-                $product->save();
+                foreach ($html->find('.product-card ') as $key => $value) {
+                    try {
+                        // craw data
+                        $imageURL = $value->find(".css-1uzm8bv img")[0]->attr["src"];
+                        $name = $value->find(".att-product-card-title h3")[0]->innertext;
+                        $file_name_image = $this->slugify($name) . ".jpg";
+                        $price = $this->formatPrice($value->find('div[type="subtitle"]')[0]->innertext);
 
-                $this->download_file($imageURL, public_path('/uploads/' . $this->slugify($name) . ".jpg"));
+                        // insert data
+                        $product = new CrawData();
+                        $product->name = $name;
+                        $product->image = $file_name_image;
+                        $product->price = $price;
+                        $product->save();
+
+                        $this->download_file($imageURL, public_path('/uploads/' . $this->slugify($name) . ".jpg"));
+                    } catch (\Exception $e) {
+                        echo $e->getMessage();
+                        continue;
+                    }
+                }
+
+
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+                continue;
             }
+
 
             sleep(5);
         }
@@ -67,12 +81,12 @@ class CrawController extends Controller
 
     public function download_file($file_url, $file_name)
     {
-        $time_start = microtime(true);
+        // $time_start = microtime(true);
         file_put_contents($file_name, file_get_contents($file_url));
-        $this->count++;
-        $time_end = microtime(true);
-        $total_time = $time_end - $time_start;
-        echo $this->count, "------>", $total_time, "<br/>";
+        // $this->count++;
+        // $time_end = microtime(true);
+        // $total_time = $time_end - $time_start;
+        // echo $this->count, "------>", $total_time, "<br/>";
     }
 
 }
