@@ -87,7 +87,7 @@
                                 {{ date('d/m/Y  H:i:s', strtotime($user->updated_at)) }}
                             </td>
 
-                            <td class="col-md-2">
+                            <td class="min-width">
                                 <div class="flex">
                                     <a href="{{ route('admin.user.edit', ['id' => $user->id]) }}"
                                         class="text-dark btn btn-warning">Edit</a>

@@ -16,12 +16,23 @@
         @include('admin.partials.sidebar')
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper" id="content-wrapper">
+            <!-- Loading -->
+            <div id="loading" class="page-loader flex-column">
+                <div>
+                    <span class="spinner-border text-primary" role="status"></span>
+                    <span class="text-muted fs-6 fw-semibold ">Loading...</span>
+                </div>
+            </div>
+
             <!-- Content Header (Page header) -->
             @include('admin.partials.content-header')
 
             <!-- Main content -->
             <section class="content">
+
+
+                <!-- Alert success -->
                 @if (Session::has('success'))
                     @push('handlejs')
                         <script>
@@ -41,7 +52,7 @@
                         </script>
                     @endpush
                 @endif
-
+                <!-- Alert error -->
                 @if ($errors->any())
                     @push('handlejs')
                         <script>
@@ -61,6 +72,7 @@
                         </script>
                     @endpush
                 @endif
+
                 @yield('content')
             </section>
             <!-- /.content -->

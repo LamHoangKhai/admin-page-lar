@@ -75,6 +75,7 @@
                         <th>Id</th>
                         <th>Name</th>
                         <th>Price</th>
+                        <th>Category</th>
                         <th>Status</th>
                         <th>Featured</th>
                         <th>Create At</th>
@@ -88,12 +89,13 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $product->name }}</td>
-                            <td>{{ $product->price }} VND</td>
+                            <td>{{ number_format($product->price, 0, ',', '.') }} VND</td>
+                            <td>{{ $product->category->name }}</td>
                             <td><span
                                     class="right badge badge-{{ $product->status == 1 ? 'success' : 'secondary' }}">{{ $product->status == 1 ? 'Show' : 'Hidden' }}</span>
                             </td>
                             <td><span
-                                    class="right badge badge-{{ $product->featured == 1 ? 'primary' : 'danger' }}">{{ $product->featured == 1 ? 'Featured' : 'Unfeatured' }}</span>
+                                    class="right badge badge-{{ $product->featured == 1 ? 'primary' : 'danger' }} ">{{ $product->featured == 1 ? 'Featured' : 'Unfeatured' }}</span>
                             </td>
                             <td>
                                 {{ date('d/m/Y  H:i:s', strtotime($product->created_at)) }}
@@ -101,7 +103,7 @@
                             <td>
                                 {{ date('d/m/Y  H:i:s', strtotime($product->updated_at)) }}
                             </td>
-                            <td class="col-md-3">
+                            <td class="min-width">
                                 <div class="flex">
                                     <button type="button" class="text-dark btn btn-info" data-toggle="modal"
                                         data-target="#showModal{{ $product->id }}">
@@ -123,6 +125,7 @@
                         <th>Id</th>
                         <th>Name</th>
                         <th>Price</th>
+                        <th>Category</th>
                         <th>Status</th>
                         <th>Featured</th>
                         <th>Create At</th>

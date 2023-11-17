@@ -17,7 +17,8 @@ class ProductController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $data = Product::orderBy('created_at', 'DESC')->get();
+        $data = Product::with("category")->orderBy('created_at', 'DESC')->get();
+
         return view('admin.modules.product.index', ["products" => $data, "categories" => $categories]);
     }
 
@@ -31,7 +32,7 @@ class ProductController extends Controller
 
         $image = $request->image;
         $filename = time() . "." . $image->getClientOriginalName();
-        $image->move(public_path("uploads"), $filename);
+
 
 
         $users = User::all();
@@ -47,6 +48,7 @@ class ProductController extends Controller
             "user_id" => $users[0]->id,
             "image" => $filename
         ]);
+        $image->move(public_path("uploads"), $filename);
         return redirect()->route('admin.product.index')->with('success', "Create product success");
     }
     /**

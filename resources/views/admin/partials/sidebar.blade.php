@@ -6,6 +6,11 @@
         <span class="brand-text font-weight-light">Project Laravel</span>
     </a>
 
+
+
+
+
+
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user (optional) -->
@@ -15,7 +20,9 @@
                     alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <h5 style="color:white">
+                    Alexander Pierce
+                </h5>
             </div>
         </div>
 
@@ -34,42 +41,45 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
+
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
+
+
+                
+                <li class="nav-item ">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-table"></i>
+                        <p>
+                            Tables
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.category.index') }} " class="nav-link ">
+                                <i class="nav-icon fas fa-sitemap"></i>
+                                <p>Category</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.product.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-box"></i>
+                                <p>Product</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.user.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>User</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <!-- Add icons to the links using the .nav-icon class
             with font-awesome or any other icon font library -->
-                <li class="nav-item">
-                    <a href="{{ route('admin.category.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-sitemap"></i>
-                        <p>
-                            Category
 
-                        </p>
-                    </a>
-
-                </li>
-
-                <li class="nav-item">
-                    <a href="{{ route('admin.product.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>
-                            Product
-
-                        </p>
-                    </a>
-
-                </li>
-
-                <li class="nav-item">
-                    <a href="{{ route('admin.user.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            User
-
-                        </p>
-                    </a>
-
-                </li>
 
             </ul>
         </nav>

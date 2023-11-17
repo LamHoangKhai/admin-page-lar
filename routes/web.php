@@ -20,14 +20,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/admin', function () {
-    return view('admin.modules.category.index');
-});
+Route::get('/admin', [ProductController::class, 'index']);
 
 Route::get('/craw', [CrawController::class, 'index']);
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
+
     Route::prefix('category')->name('category.')->controller(CategoryController::class)->group(function () {
         Route::get('index', 'index')->name('index');
 

@@ -34,6 +34,7 @@ class StoreRequest extends FormRequest
             "name.required" => "Vui lòng nhập tên product",
             "name.unique" => "Tên sản phẩm đã tồn tại",
             "price.required" => "Vui lòng nhập giá",
+            "price.numeric" => "Vui lòng nhập số",
             "image.required" => "Vui lòng upload hình",
             "image.mimes" => "Vui lòng chọn đúng loại file (png,jpg)",
         ];

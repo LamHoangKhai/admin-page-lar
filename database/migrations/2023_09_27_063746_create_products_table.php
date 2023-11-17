@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->tinyInteger('featured');
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');
-            $table->string('user_id', 36);
+            $table->string('user_id', 36)->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

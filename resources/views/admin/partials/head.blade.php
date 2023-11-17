@@ -9,7 +9,11 @@
 <link rel="stylesheet" href="{{ asset('administrator/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 
 <!-- custom css -->
+<link rel="stylesheet" href="{{ asset('administrator/custom/css/app.css') }}">
 <link rel="stylesheet" href="{{ asset('administrator/custom/css/table/custom-table.css') }}">
+<link rel="stylesheet" href="{{ asset('administrator/custom/css/side-bar/sidebar.css') }}">
+
+
 
 @stack('css')
 

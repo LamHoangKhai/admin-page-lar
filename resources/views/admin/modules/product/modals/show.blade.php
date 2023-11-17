@@ -19,6 +19,7 @@
                     <li>Featured: <span
                             class="right badge badge-{{ $product->featured == 1 ? 'primary' : 'danger' }}">{{ $product->featured == 1 ? 'Featured' : 'Unfeatured' }}</span>
                     </li>
+                    <li>Category: {{ $product->category->name }}</li>
                 </ul>
                 <hr>
                 <div>
@@ -28,6 +29,10 @@
                 <div>
                     <h4>Content</h4>
                     <textarea class="form-control " rows="4" style="font-size:1.2rem;background:white;" disabled>{{ $product->content }}</textarea>
+                </div>
+                <div>
+                    <h4>Image</h4>
+                    <img src="{{ asset('uploads/' . $product->image) }}" alt="" width="200px">
                 </div>
             </div>
             <div class="modal-footer">

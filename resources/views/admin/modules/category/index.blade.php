@@ -81,7 +81,7 @@
                             <td>
                                 {{ date('d/m/Y  H:i:s', strtotime($category->updated_at)) }}
                             </td>
-                            <td class="col-md-3">
+                            <td class="min-width">
                                 <div class="flex">
                                     <a href="{{ route('admin.category.edit', ['id' => $category->id]) }}"
                                         class="text-dark btn btn-warning ">Edit</a>
