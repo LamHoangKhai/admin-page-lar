@@ -80,4 +80,19 @@ class CategoryController extends Controller
         return redirect()->route("admin.category.index")->with("success", "Delete category success");
 
     }
+    public function record()
+    {
+        $categories = Category::onlyTrashed()->get();
+        foreach ($categories as $category) {
+            echo $category->id . "" . $category->name . "<br/>";
+        }
+        return "Success";
+
+    }
+    public function restore()
+    {
+        Category::withTrashed()->where('id', 1)->restore();
+        return "Success";
+
+    }
 }

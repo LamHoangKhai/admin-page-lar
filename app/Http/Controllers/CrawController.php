@@ -21,42 +21,53 @@ class CrawController extends Controller
                 )
             )
         );
-        for ($i = 1; $i <= 1; $i++) {
 
+        $products = [];
+        $count = 0;
+        for ($i = 1; $i <= 1; $i++) {
             try {
                 $html = file_get_html("https://phongvu.vn/c/do-gia-dung-thiet-bi-gia-dinh?page=$i", false, $context);
-
                 foreach ($html->find('.product-card ') as $key => $value) {
-                    try {
-                        // craw data
-                        $imageURL = $value->find(".css-1uzm8bv img")[0]->attr["src"];
-                        $name = $value->find(".att-product-card-title h3")[0]->innertext;
-                        $file_name_image = $this->slugify($name) . ".jpg";
-                        $price = $this->formatPrice($value->find('div[type="subtitle"]')[0]->innertext);
 
-                        // insert data
-                        $product = new Product();
-                        $product->name = $name;
-                        $product->image = $file_name_image;
-                        $product->price = $price;
-                        $product->status = 1;
-                        $product->featured = 1;
-                        $product->description = $name;
-                        $product->content = $name;
-                        $product->category_id = $category[rand(0, count($category) - 1)]->id;
-                        $product->save();
-                        $this->download_file($imageURL, public_path('/uploads/' . $this->slugify($$file_name_image)));
-                    } catch (\Exception $e) {
-                        echo $e->getMessage();
-                        continue;
-                    }
+                    // craw data
+                    $name = $value->find(".att-product-card-title h3")[0]->innertext;
+                    $imageURL = $value->find(".css-1uzm8bv img")[0]->attr["src"];
+                    $products[$count]['name'] = $name;
+                    $products[$count]['file_name_image'] = $this->slugify($name) . ".jpg";
+                    $products[$count]['price'] = $this->formatPrice($value->find('div[type="subtitle"]')[0]->innertext);
+                    // $this->download_file($imageURL, public_path('/uploads/' . $products[$count]['file_name_image']));
+                    $count++;
                 }
             } catch (\Exception $e) {
+                echo "Errors get data </br>";
                 echo $e->getMessage();
+                echo "</br>";
                 continue;
             }
 
             sleep(5);
+        }
+
+        foreach ($products as $k => $v) {
+            try {
+                // insert data
+                $product = new Product();
+                $product->name = $products[$k]["name"];
+                $product->image = $products[$k]['file_name_image'];
+                $product->price = $products[$k]['price'];
+                $product->status = 1;
+                $product->featured = 1;
+                $product->description = $products[$k]["name"];
+                $product->content = $products[$k]["name"];
+                $product->category_id = $category[rand(0, count($category) - 1)]->id;
+                $product->save();
+
+            } catch (\Exception $e) {
+                echo "Errors insert </br>";
+                echo $e->getMessage();
+                echo "</br>";
+            }
+
         }
 
 

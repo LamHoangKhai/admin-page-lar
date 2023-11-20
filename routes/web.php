@@ -29,6 +29,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::prefix('category')->name('category.')->controller(CategoryController::class)->group(function () {
         Route::get('index', 'index')->name('index');
+        Route::get('record', 'record')->name('record');
+        Route::get('restore', 'restore')->name('restore');
 
         Route::get('create', 'create')->name('create');
         Route::post('store', 'store')->name('store');
