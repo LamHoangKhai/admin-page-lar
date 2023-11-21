@@ -24,6 +24,10 @@ Route::get('/admin', [ProductController::class, 'index']);
 
 Route::get('/craw', [CrawController::class, 'index']);
 
+Route::get('/search', function () {
+    return view('admin.modules.search-filter.index');
+})->name("search");
+
 
 Route::prefix('admin')->name('admin.')->group(function () {
 

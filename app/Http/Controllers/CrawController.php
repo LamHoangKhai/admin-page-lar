@@ -35,7 +35,7 @@ class CrawController extends Controller
                     $products[$count]['name'] = $name;
                     $products[$count]['file_name_image'] = $this->slugify($name) . ".jpg";
                     $products[$count]['price'] = $this->formatPrice($value->find('div[type="subtitle"]')[0]->innertext);
-                    // $this->download_file($imageURL, public_path('/uploads/' . $products[$count]['file_name_image']));
+                    $this->download_file($imageURL, public_path('/uploads/' . $products[$count]['file_name_image']));
                     $count++;
                 }
             } catch (\Exception $e) {
@@ -55,8 +55,8 @@ class CrawController extends Controller
                 $product->name = $products[$k]["name"];
                 $product->image = $products[$k]['file_name_image'];
                 $product->price = $products[$k]['price'];
-                $product->status = 1;
-                $product->featured = 1;
+                $product->status = rand(1, 2);
+                $product->featured = rand(1, 2);
                 $product->description = $products[$k]["name"];
                 $product->content = $products[$k]["name"];
                 $product->category_id = $category[rand(0, count($category) - 1)]->id;
