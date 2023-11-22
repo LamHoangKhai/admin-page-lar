@@ -122,7 +122,8 @@ const loadSearchFilter = (storage) => {
     if (
         !storage.search &&
         storage.status.length === 0 &&
-        storage.featured.length === 0
+        storage.featured.length === 0 &&
+        !storage.category
     ) {
         $("#renderData").html("");
         return 0;
@@ -147,7 +148,6 @@ const loadSearchFilter = (storage) => {
     }
 
     $("#renderData").html("");
-
     $.ajax({
         type: "GET",
         url: url,
