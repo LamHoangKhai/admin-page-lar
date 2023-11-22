@@ -1,5 +1,5 @@
 $(document).ready(() => {
-    let history = {
+    let storage = {
         search: "",
         status: [],
         featured: [],
@@ -18,18 +18,19 @@ $(document).ready(() => {
             if (e.keyCode === 13) {
                 return 0;
             }
-            history = { ...history, search: e.target.value };
+            console.log("run");
+            storage = { ...storage, search: e.target.value };
 
-            loadSearchFilter(history);
+            loadSearchFilter(storage);
         }, 500)
     );
 
-    $("#search").keydown(
+    $("#search").keyup(
         debounce((e) => {
             if (e.keyCode === 8) {
-                history = { ...history, search: e.target.value };
-                console.log(history);
-                loadSearchFilter(history);
+                storage = { ...storage, search: e.target.value };
+                console.log(storage);
+                loadSearchFilter(storage);
             }
             return 0;
         }, 500)
@@ -37,31 +38,30 @@ $(document).ready(() => {
     // end handle search
 
     // handle filter
-
     $(".filter").change((e) => {
         const selecter = e.target;
         const isChecked = selecter.checked;
         const name = selecter.name;
         const value = selecter.value;
 
-        if (name === "status" && isChecked) {
-            history = { ...history, status: [...history.status, value] };
-        }
-        if (name === "status" && !isChecked) {
-            history = {
-                ...history,
-                status: [...history.status.filter((e) => e !== value)],
-            };
+        if (name === "status") {
+            storage = isChecked
+                ? { ...storage, status: [...storage.status, value] }
+                : {
+                      ...storage,
+                      status: [...storage.status.filter((e) => e !== value)],
+                  };
         }
 
-        if (name === "featured" && isChecked) {
-            history = { ...history, featured: [...history.featured, value] };
-        }
-        if (name === "featured" && !isChecked) {
-            history = {
-                ...history,
-                featured: [...history.featured.filter((e) => e !== value)],
-            };
+        if (name === "featured") {
+            storage = isChecked
+                ? { ...storage, featured: [...storage.featured, value] }
+                : {
+                      ...storage,
+                      featured: [
+                          ...storage.featured.filter((e) => e !== value),
+                      ],
+                  };
         }
 
         $(selecter).attr("disabled", true);
@@ -69,7 +69,7 @@ $(document).ready(() => {
             $(selecter).removeAttr("disabled");
         }, 500);
 
-        loadSearchFilter(history);
+        loadSearchFilter(storage);
     });
     // end handle filter
 
@@ -95,12 +95,12 @@ $(document).ready(() => {
     //handle filter category
     $("#category").change((e) => {
         if (!e.target.value) {
-            history = { ...history, category: "" };
-            loadSearchFilter(history);
+            storage = { ...storage, category: "" };
+            loadSearchFilter(storage);
             return 0;
         }
-        history = { ...history, category: e.target.value };
-        loadSearchFilter(history);
+        storage = { ...storage, category: e.target.value };
+        loadSearchFilter(storage);
     });
     //end handle filter category
 });
@@ -118,30 +118,30 @@ const debounce = (callback, timeout = 500) => {
 // end function debounce
 
 //  call api Search
-const loadSearchFilter = (history) => {
+const loadSearchFilter = (storage) => {
     if (
-        !history.search &&
-        history.status.length === 0 &&
-        history.featured.length === 0
+        !storage.search &&
+        storage.status.length === 0 &&
+        storage.featured.length === 0
     ) {
         $("#renderData").html("");
         return 0;
     }
 
     let url = "http://localhost:8000/api/search?";
-    if (history.search) {
-        url += "s=" + history.search + "&";
+    if (storage.search) {
+        url += "s=" + storage.search + "&";
     }
-    if (history.category) {
-        url += "category_id=" + history.category + "&";
+    if (storage.category) {
+        url += "category_id=" + storage.category + "&";
     }
-    if (history.status) {
-        history.status.forEach((e) => {
+    if (storage.status) {
+        storage.status.forEach((e) => {
             url += "status[]=" + e + "&";
         });
     }
-    if (history.featured) {
-        history.featured.forEach((e) => {
+    if (storage.featured) {
+        storage.featured.forEach((e) => {
             url += "featured[]=" + e + "&";
         });
     }
@@ -185,5 +185,3 @@ const loadSearchFilter = (history) => {
         },
     });
 };
-
-//  ajax call api
