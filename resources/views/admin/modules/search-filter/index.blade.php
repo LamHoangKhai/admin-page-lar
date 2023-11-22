@@ -69,6 +69,16 @@
                         <input type="checkbox" class="filter" name="featured" value="2">
                     </label>
                 </div>
+
+
+                <div>
+                    <label for="featured">Category
+                        <select id="category">
+                            
+                        </select>
+                    </label>
+                </div>
+
             </div>
             <table id="example1" class="table table-bordered table-striped">
                 <thead>

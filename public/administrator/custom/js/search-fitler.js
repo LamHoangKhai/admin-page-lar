@@ -3,6 +3,7 @@ $(document).ready(() => {
         search: "",
         status: [],
         featured: [],
+        category: "",
     };
 
     $.ajaxSetup({
@@ -19,7 +20,7 @@ $(document).ready(() => {
             }
             history = { ...history, search: e.target.value };
 
-            load(history);
+            loadSearchFilter(history);
         }, 500)
     );
 
@@ -27,10 +28,8 @@ $(document).ready(() => {
         debounce((e) => {
             if (e.keyCode === 8) {
                 history = { ...history, search: e.target.value };
-                let url =
-                    "http://localhost:8000/api/search" + "?s=" + history.search;
-
-                load(history);
+                console.log(history);
+                loadSearchFilter(history);
             }
             return 0;
         }, 500)
@@ -70,10 +69,40 @@ $(document).ready(() => {
             $(selecter).removeAttr("disabled");
         }, 500);
 
-        load(history);
+        loadSearchFilter(history);
     });
-
     // end handle filter
+
+    // get category
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8000/api/category",
+        contentType: "json",
+        success: (res) => {
+            let xhtml = `<option value="">--Chọn--Category--</option>`;
+            let data = res.data;
+            data.forEach((element) => {
+                xhtml += `<option value="${element.id}">${element.name}</option>`;
+            });
+            $("#category").append(xhtml);
+        },
+        error: function (error) {
+            console.log(error.message);
+        },
+    });
+    // end get category
+
+    //handle filter category
+    $("#category").change((e) => {
+        if (!e.target.value) {
+            history = { ...history, category: "" };
+            loadSearchFilter(history);
+            return 0;
+        }
+        history = { ...history, category: e.target.value };
+        loadSearchFilter(history);
+    });
+    //end handle filter category
 });
 
 // function debounce
@@ -88,21 +117,23 @@ const debounce = (callback, timeout = 500) => {
 };
 // end function debounce
 
-// config ajax call api
-const load = (history) => {
+//  call api Search
+const loadSearchFilter = (history) => {
     if (
         !history.search &&
         history.status.length === 0 &&
         history.featured.length === 0
     ) {
         $("#renderData").html("");
-        console.log("run");
         return 0;
     }
 
     let url = "http://localhost:8000/api/search?";
     if (history.search) {
         url += "s=" + history.search + "&";
+    }
+    if (history.category) {
+        url += "category_id=" + history.category + "&";
     }
     if (history.status) {
         history.status.forEach((e) => {
@@ -116,6 +147,7 @@ const load = (history) => {
     }
 
     $("#renderData").html("");
+
     $.ajax({
         type: "GET",
         url: url,
@@ -153,4 +185,5 @@ const load = (history) => {
         },
     });
 };
-// end config ajax call api
+
+//  ajax call api

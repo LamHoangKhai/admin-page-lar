@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/search', [SearchFilterController::class, "search"]);
+Route::get('/category', [SearchFilterController::class, "get_category"]);
