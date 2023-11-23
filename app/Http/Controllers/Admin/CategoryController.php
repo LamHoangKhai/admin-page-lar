@@ -60,7 +60,7 @@ class CategoryController extends Controller
      */
     public function update(UpdateRequest $request, string $id)
     {
-        $dataCurrent = Category::find($id);
+        $dataCurrent = Category::findOrFail($id);
         $data = [
             "parent_id" => $request->parent_id,
             "name" => $request->name,
@@ -75,7 +75,7 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Category::find($id);
+        $category = Category::findOrFail($id);
         $category->delete();
         return redirect()->route("admin.category.index")->with("success", "Delete category success");
 

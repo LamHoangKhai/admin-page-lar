@@ -3,34 +3,27 @@ $(document).ready(() => {
         search: "",
         status: [],
         featured: [],
-        category: "",
+        category_id: "",
+        page: "",
+        url: $("#url").data("url"),
     };
-
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-    });
-
     //handle search
     $("#search").keypress(
         debounce((e) => {
             if (e.keyCode === 13) {
                 return 0;
             }
-            console.log("run");
-            storage = { ...storage, search: e.target.value };
-
-            loadSearchFilter(storage);
+            storage.search = e.target.value;
+            storage.page = 1;
+            $("#pagination").simplePaginator("changePage", 1);
         }, 500)
     );
 
     $("#search").keyup(
         debounce((e) => {
             if (e.keyCode === 8) {
-                storage = { ...storage, search: e.target.value };
-                console.log(storage);
-                loadSearchFilter(storage);
+                storage.search = e.target.value;
+                $("#pagination").simplePaginator("changePage", 1);
             }
             return 0;
         }, 500)
@@ -43,66 +36,50 @@ $(document).ready(() => {
         const isChecked = selecter.checked;
         const name = selecter.name;
         const value = selecter.value;
-
+        storage.page = 1;
         if (name === "status") {
-            storage = isChecked
-                ? { ...storage, status: [...storage.status, value] }
-                : {
-                      ...storage,
-                      status: [...storage.status.filter((e) => e !== value)],
-                  };
+            storage.status = isChecked
+                ? [...storage.status, value]
+                : [...storage.status.filter((e) => e !== value)];
         }
 
         if (name === "featured") {
-            storage = isChecked
-                ? { ...storage, featured: [...storage.featured, value] }
-                : {
-                      ...storage,
-                      featured: [
-                          ...storage.featured.filter((e) => e !== value),
-                      ],
-                  };
+            storage.featured = isChecked
+                ? [...storage.featured, value]
+                : [...storage.featured.filter((e) => e !== value)];
         }
 
         $(selecter).attr("disabled", true);
         setTimeout(() => {
             $(selecter).removeAttr("disabled");
         }, 500);
-
-        loadSearchFilter(storage);
+        $("#pagination").simplePaginator("changePage", 1);
     });
     // end handle filter
 
-    // get category
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8000/api/category",
-        contentType: "json",
-        success: (res) => {
-            let xhtml = `<option value="">--Chọn--Category--</option>`;
-            let data = res.data;
-            data.forEach((element) => {
-                xhtml += `<option value="${element.id}">${element.name}</option>`;
-            });
-            $("#category").append(xhtml);
-        },
-        error: function (error) {
-            console.log(error.message);
-        },
-    });
-    // end get category
-
     //handle filter category
     $("#category").change((e) => {
-        if (!e.target.value) {
-            storage = { ...storage, category: "" };
-            loadSearchFilter(storage);
-            return 0;
-        }
-        storage = { ...storage, category: e.target.value };
-        loadSearchFilter(storage);
+        storage.category_id = e.target.value;
+        storage.page = 1;
+        $("#pagination").simplePaginator("changePage", 1);
     });
     //end handle filter category
+
+    // load pagination
+    $("#pagination").simplePaginator({
+        totalPages: 1,
+        maxButtonsVisible: 5,
+        currentPage: 1,
+        nextLabel: "next",
+        prevLabel: "prev",
+        firstLabel: "first",
+        lastLabel: "last",
+        clickCurrentPage: true,
+        pageChange: function (page) {
+            storage.page = page;
+            loadSearchFilter(storage);
+        },
+    });
 });
 
 // function debounce
@@ -117,41 +94,36 @@ const debounce = (callback, timeout = 500) => {
 };
 // end function debounce
 
+// set total page
+const setTotalPages = (amountOfData) => {
+    let totalPage = 0;
+    if (amountOfData > 20) {
+        for (let i = amountOfData; i > 0; i -= 20) {
+            totalPage += 1;
+        }
+    } else {
+        totalPage = 1;
+    }
+    $("#pagination").simplePaginator("setTotalPages", totalPage);
+};
+
+// end handle pagination
+
 //  call api Search
 const loadSearchFilter = (storage) => {
-    if (
-        !storage.search &&
-        storage.status.length === 0 &&
-        storage.featured.length === 0 &&
-        !storage.category
-    ) {
-        $("#renderData").html("");
-        return 0;
-    }
-
-    let url = "http://localhost:8000/api/search?";
-    if (storage.search) {
-        url += "s=" + storage.search + "&";
-    }
-    if (storage.category) {
-        url += "category_id=" + storage.category + "&";
-    }
-    if (storage.status) {
-        storage.status.forEach((e) => {
-            url += "status[]=" + e + "&";
-        });
-    }
-    if (storage.featured) {
-        storage.featured.forEach((e) => {
-            url += "featured[]=" + e + "&";
-        });
-    }
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
 
     $("#renderData").html("");
+
     $.ajax({
-        type: "GET",
-        url: url,
-        contentType: "json",
+        type: "POST",
+        url: storage.url,
+        data: storage,
+        dataType: "json",
         success: (res) => {
             let xhtml = "";
             let data = res.data || [];
@@ -179,6 +151,7 @@ const loadSearchFilter = (storage) => {
             `;
             });
             $("#renderData").append(xhtml);
+            setTotalPages(res.amountOfData);
         },
         error: function (error) {
             console.log(error.message);

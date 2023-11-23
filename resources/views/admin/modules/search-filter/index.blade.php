@@ -20,30 +20,24 @@
     <script src="{{ asset('administrator/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('administrator/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('administrator/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('administrator/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('administrator/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('administrator/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('administrator/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('administrator/plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('administrator/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('administrator/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('administrator/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-    <script src="{{ asset('administrator/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
+
+    <script src="{{ asset('administrator/plugins/simple-bootstrap-paginator-master/simple-bootstrap-paginator.js') }}">
+    </script>
 @endpush
 
 @push('handlejs')
     <script src="{{ asset('administrator/custom/js/search-fitler.js') }}"></script>
+    <script src="{{ asset('administrator/custom/js/get-category.js') }}"></script>
 @endpush
 
 @section('content')
+    <input type="hidden" id="url" data-url="{{ route('search') }}">
     <!-- Default box -->
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="">Products</h3>
 
-            <button style="position: absolute;right:18px" type="button" class="btn btn-primary align-self-end"
-                data-toggle="modal" data-target="#addNewProduct">+ Add
-                Product</button>
         </div>
 
 
@@ -74,7 +68,7 @@
                 <div>
                     <label for="featured">Category
                         <select id="category">
-                            
+
                         </select>
                     </label>
                 </div>
@@ -107,6 +101,7 @@
                     </tr>
                 </tbody>
                 <tfoot>
+
                     <tr>
                         <th>Id</th>
                         <th>Name</th>
@@ -117,8 +112,11 @@
 
                     </tr>
                 </tfoot>
+
             </table>
             {{-- End Render data --}}
+            <div id="pagination" class="text-center"></div>
+
         </div>
 
     </div>

@@ -52,7 +52,7 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $data = User::find($id);
+        $data = User::findOrFail($id);
         return view('admin.modules.user.edit', ["data" => $data, "id" => $id]);
     }
 
@@ -62,7 +62,7 @@ class UserController extends Controller
     public function update(UpdateRequest $request, string $id)
     {
 
-        $dataCurrent = User::find($id);
+        $dataCurrent = User::findOrFail($id);
         $data = [
             "full_name" => $request->full_name,
             "level" => $request->level,
@@ -91,8 +91,9 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::find($id);
-        $user->delete();
+        $user = User::findOrFail($id);
+        $user->status = 3;
+        $user->save();
         return redirect()->route("admin.user.index")->with("success", "Delete user success");
     }
 }

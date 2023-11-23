@@ -64,7 +64,7 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $data = Product::find($id);
+        $data = Product::findOrFail($id);
         $categories = Category::all();
         return view('admin.modules.product.edit', ["data" => $data, "id" => $id, "categories" => $categories]);
     }
@@ -74,7 +74,7 @@ class ProductController extends Controller
      */
     public function update(UpdateRequest $request, string $id)
     {
-        $dataCurrent = Product::findOrFail($id);
+        $dataCurrent = Product::findOrFailOrFail($id);
         $data = [
             "name" => $request->name,
             "price" => $request->price,
@@ -114,7 +114,7 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         $file = public_path("uploads/") . $product->image;
 
         if (file_exists($file)) {

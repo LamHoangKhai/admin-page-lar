@@ -81,7 +81,7 @@
                                 <option value="1" {{ old('status', $data->status) == 1 ? 'selected' : '' }}>Show
                                 </option>
 
-                                <option value="2" {{ old('status', $data->Status) == 2 ? 'selected' : '' }}>Hiddent
+                                <option value="2" {{ old('status', $data->Status) == 2 ? 'selected' : '' }}>Hidden
                                 </option>
 
                             </select>

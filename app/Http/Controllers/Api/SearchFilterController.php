@@ -18,6 +18,7 @@ class SearchFilterController extends Controller
      */
     public function search(Request $request)
     {
+
         $checkValid = false;
         if (
             ($request->status && !is_array($request->status)) ||
@@ -44,11 +45,13 @@ class SearchFilterController extends Controller
         }
 
 
-        $search = $request->s ? $request->s : "";
-        $status = $request->status ? $request->status : [1, 2];
-        $featured = $request->featured ? $request->featured : [1, 2];
+        $search = $request->search ? $request->search : "";
+        $status = $request->status;
+        $featured = $request->featured;
         $category_id = $request->category_id;
-
+        $query = Product::with("category");
+        $page = (int) $request->page;
+        $skip = 0;
 
         $queryWhere[] = ["name", "like", "%" . $search . "%"];
 
@@ -56,10 +59,24 @@ class SearchFilterController extends Controller
             $queryWhere[] = ["category_id", "=", $category_id];
         }
 
-        $data = Product::with("category")->where($queryWhere)->whereIn("status", $status)->whereIn("featured", $featured)->get();
+        $query = $query->where($queryWhere);
+        if ($status) {
+            $query = $query->whereIn("status", $status);
+        }
+        if ($featured) {
+            $query = $query->whereIn("featured", $featured);
+        }
+        if ($page > 1) {
+            for ($i = 1; $i < $page; $i++) {
+                $skip += 20;
+            }
 
+        }
+        $countData = $query->count();
+        $data = $query->skip($skip)->take(20)->get();
 
-        return response()->json(['status_code' => 200, 'msg' => "Kết nối thành công nha bạn.", "data" => $data]);
+        return response()->json(['status_code' => 200, 'msg' => "Kết nối thành công nha bạn.", "data" => $data, "amountOfData" => $countData]);
+
     }
 
     /**

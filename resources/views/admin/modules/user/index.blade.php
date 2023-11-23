@@ -60,10 +60,10 @@
                     <tr>
                         <th>#</th>
                         <th>Email</th>
-                        <th>Level</th>
                         <th>Full Name</th>
                         <th>Phone</th>
-
+                        <th>Level</th>
+                        <th>Status</th>
                         <th>Create At</th>
                         <th>Update At</th>
                         <th>Action</th>
@@ -74,11 +74,17 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $user->email }}</td>
+
+                            <td>{{ $user->full_name }}</td>
+                            <td>{{ $user->phone }}</td>
                             <td><span
                                     class="right badge badge-{{ $user->level == 1 ? 'primary' : 'dark' }}">{{ $user->level == 1 ? 'Member' : 'Admin' }}</span>
                             </td>
-                            <td>{{ $user->full_name }}</td>
-                            <td>{{ $user->phone }}</td>
+                            <td>
+                                <span class="right badge badge-{{ $user->status === 1 ? 'success' : 'warning' }}">
+                                    {{ $user->status === 1 ? 'Show' : 'Hidden' }}</span>
+
+                            </td>
 
                             <td>
                                 {{ date('d/m/Y  H:i:s', strtotime($user->created_at)) }}
@@ -105,9 +111,10 @@
                     <tr>
                         <th>#</th>
                         <th>Email</th>
-                        <th>Level</th>
                         <th>Full Name</th>
                         <th>Phone</th>
+                        <th>Level</th>
+                        <th>Status</th>
                         <th>Create At</th>
                         <th>Update At</th>
                         <th>Action</th>
