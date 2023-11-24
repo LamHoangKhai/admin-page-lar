@@ -24,7 +24,7 @@ class CrawController extends Controller
 
         $products = [];
         $count = 0;
-        for ($i = 1; $i <= 1; $i++) {
+        for ($i = 1; $i <= 47; $i++) {
             try {
                 $html = file_get_html("https://phongvu.vn/c/do-gia-dung-thiet-bi-gia-dinh?page=$i", false, $context);
                 foreach ($html->find('.product-card ') as $key => $value) {
@@ -35,7 +35,7 @@ class CrawController extends Controller
                     $products[$count]['name'] = $name;
                     $products[$count]['file_name_image'] = $this->slugify($name) . ".jpg";
                     $products[$count]['price'] = $this->formatPrice($value->find('div[type="subtitle"]')[0]->innertext);
-                    $this->download_file($imageURL, public_path('/uploads/' . $products[$count]['file_name_image']));
+                    // $this->download_file($imageURL, public_path('/uploads/' . $products[$count]['file_name_image']));
                     $count++;
                 }
             } catch (\Exception $e) {

@@ -66,10 +66,22 @@
 
 
                 <div>
-                    <label for="featured">Category
+                    <label for="category">Category
                         <select id="category">
 
                         </select>
+                    </label>
+                </div>
+
+                <div>
+                    <label for="featured">Show
+                        <select id="showEntries">
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="75">75</option>
+                            <option value="100">100</option>
+                        </select>
+                        entries
                     </label>
                 </div>
 
@@ -115,12 +127,19 @@
 
             </table>
             {{-- End Render data --}}
-            <div id="pagination" class="text-center"></div>
+            <div class="pagination d-flex justify-content-between align-items-center  mt-4">
+                <div>
+                    <p class="totalpage mb-1">
+                    </p>
+                    <p>Move page <input type="number" id="movePage" /></p>
+                </div>
+
+                <div id="pagination" class="text-center pt-3"></div>
+
+            </div>
 
         </div>
-
-    </div>
-    <!-- /.card -->
+        <!-- /.card -->
 
 
-@endsection
+    @endsection

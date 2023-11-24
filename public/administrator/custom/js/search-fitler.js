@@ -4,7 +4,10 @@ $(document).ready(() => {
         status: [],
         featured: [],
         category_id: "",
-        page: "",
+        page: 0,
+        take: 25,
+        amountOfData: 0,
+        totalPage: 1,
         url: $("#url").data("url"),
     };
     //handle search
@@ -65,10 +68,18 @@ $(document).ready(() => {
     });
     //end handle filter category
 
+    //choose show entries
+    $("#showEntries").change((e) => {
+        storage.take = e.target.value;
+        storage.page = 1;
+        $("#pagination").simplePaginator("changePage", 1);
+    });
+    //end choose show entries
+
     // load pagination
     $("#pagination").simplePaginator({
         totalPages: 1,
-        maxButtonsVisible: 5,
+        maxButtonsVisible: 10,
         currentPage: 1,
         nextLabel: "next",
         prevLabel: "prev",
@@ -76,10 +87,28 @@ $(document).ready(() => {
         lastLabel: "last",
         clickCurrentPage: true,
         pageChange: function (page) {
-            storage.page = page;
+            storage.page = parseInt(page);
+            this.currentPage = storage.page;
+            console.log(page);
             loadSearchFilter(storage);
         },
     });
+    // end pagination
+
+    // move fast page
+    $("#movePage").keypress(
+        debounce((e) => {
+            let page = parseInt(e.target.value);
+            // if user input value > total page
+            if (page > storage.totalPage) {
+                storage.page = storage.totalPage;
+            } else {
+                storage.page = page;
+            }
+            $("#pagination").simplePaginator("changePage", storage.page);
+        }, 500)
+    );
+    // end fast page
 });
 
 // function debounce
@@ -95,18 +124,13 @@ const debounce = (callback, timeout = 500) => {
 // end function debounce
 
 // set total page
-const setTotalPages = (amountOfData) => {
-    let totalPage = 0;
-    if (amountOfData > 20) {
-        for (let i = amountOfData; i > 0; i -= 20) {
-            totalPage += 1;
-        }
-    } else {
-        totalPage = 1;
-    }
-    $("#pagination").simplePaginator("setTotalPages", totalPage);
+const setTotalPages = (storage) => {
+    storage.totalPage = Math.round(storage.amountOfData / storage.take);
+    $("#pagination").simplePaginator("setTotalPages", storage.totalPage);
+    $(".totalpage").text(
+        `Showing ${storage.page} to ${storage.totalPage} of ${storage.amountOfData} entries`
+    );
 };
-
 // end handle pagination
 
 //  call api Search
@@ -151,7 +175,8 @@ const loadSearchFilter = (storage) => {
             `;
             });
             $("#renderData").append(xhtml);
-            setTotalPages(res.amountOfData);
+            storage.amountOfData = res.amountOfData;
+            setTotalPages(storage);
         },
         error: function (error) {
             console.log(error.message);

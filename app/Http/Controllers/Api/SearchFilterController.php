@@ -23,7 +23,9 @@ class SearchFilterController extends Controller
         if (
             ($request->status && !is_array($request->status)) ||
             ($request->featured && !is_array($request->featured)) ||
-            ($request->category_id && !is_numeric($request->category_id))
+            ($request->category_id && !is_numeric($request->category_id)) ||
+            ($request->page && !is_numeric($request->page)) ||
+            ($request->take && !is_numeric($request->take))
         ) {
             $checkValid = true;
         } else {
@@ -41,7 +43,7 @@ class SearchFilterController extends Controller
         }
 
         if ($checkValid) {
-            return response()->json(['status_code' => 400, 'msg' => "Query params not correct", 'queryparams' => ["s" => "truyền vào phải là chuỗi", "status-featured" => "truyền vào là mảng và phần tử mảng là number", "category_id" => "phải là số"]]);
+            return response()->json(['status_code' => 400, 'msg' => "Query params not correct", 'queryparams' => ["search" => "truyền vào phải là chuỗi", "status-featured" => "truyền vào là mảng và phần tử mảng là number", "category_id" => "phải là số", "page&take" => "phải là số"]]);
         }
 
 
@@ -51,7 +53,8 @@ class SearchFilterController extends Controller
         $category_id = $request->category_id;
         $query = Product::with("category");
         $page = (int) $request->page;
-        $skip = 0;
+        $take = (int) $request->take;
+        $skip = ($page * $take) - $take;
 
         $queryWhere[] = ["name", "like", "%" . $search . "%"];
 
@@ -67,13 +70,11 @@ class SearchFilterController extends Controller
             $query = $query->whereIn("featured", $featured);
         }
         if ($page > 1) {
-            for ($i = 1; $i < $page; $i++) {
-                $skip += 20;
-            }
-
+            $skip = ($page * $take) - $take;
         }
+
         $countData = $query->count();
-        $data = $query->skip($skip)->take(20)->get();
+        $data = $query->skip($skip)->take($take)->get();
 
         return response()->json(['status_code' => 200, 'msg' => "Kết nối thành công nha bạn.", "data" => $data, "amountOfData" => $countData]);
 

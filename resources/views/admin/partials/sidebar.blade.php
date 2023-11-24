@@ -78,7 +78,7 @@
             with font-awesome or any other icon font library -->
 
                 <li class="nav-item">
-                    <a href="{{ route('search') }} " class="nav-link ">
+                    <a href="{{ route('showSearch') }} " class="nav-link ">
                         <i class="nav-icon fas fa-sitemap"></i>
                         <p>Bài Tập search&filter</p>
                     </a>
