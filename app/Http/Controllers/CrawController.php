@@ -24,7 +24,7 @@ class CrawController extends Controller
 
         $products = [];
         $count = 0;
-        for ($i = 1; $i <= 47; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             try {
                 $html = file_get_html("https://phongvu.vn/c/do-gia-dung-thiet-bi-gia-dinh?page=$i", false, $context);
                 foreach ($html->find('.product-card ') as $key => $value) {
