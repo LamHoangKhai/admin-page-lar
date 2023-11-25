@@ -16,9 +16,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        $data = Product::with("category")->orderBy('created_at', 'DESC')->get();
-
+        $categories = Category::get();
+        $data = Product::with("category")->orderBy('created_at', 'DESC')->paginate(20);
+        $data->withPath('/admin/product/index');
         return view('admin.modules.product.index', ["products" => $data, "categories" => $categories]);
     }
 

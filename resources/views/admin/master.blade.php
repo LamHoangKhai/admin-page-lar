@@ -53,7 +53,7 @@
                     @endpush
                 @endif
                 <!-- Alert error -->
-                @if ($errors->any())
+                @if (Session::has('error'))
                     @push('handlejs')
                         <script>
                             $(function() {
@@ -66,7 +66,7 @@
                                 });
                                 Toast.fire({
                                     icon: 'error',
-                                    title: 'Action fail'
+                                    title: '{{ Session::get('error') }}'
                                 })
                             })
                         </script>

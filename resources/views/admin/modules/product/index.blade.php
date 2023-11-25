@@ -32,8 +32,23 @@
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                "info": false,
+                "ordering": false,
+                "paging": false,
+                "bFilter": false,
+                "columns": [
+                    null, {
+                        "width": "12%"
+                    },
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                ],
+            });
         });
 
         function displaySelectedImage(event, elementId) {
@@ -50,6 +65,12 @@
                 reader.readAsDataURL(fileInput.files[0]);
             }
         }
+        // $(document).ready(() => {
+        //     $(".page-link").click((e) => {
+        //         e.preventDefault();
+        //         window.history.pushState(e.target.href, "New Page", e.target.href);
+        //     })
+        // })
     </script>
 @endpush
 
@@ -134,6 +155,7 @@
                     </tr>
                 </tfoot>
             </table>
+            {{ $products->links() }}
             {{-- End Render data --}}
         </div>
 

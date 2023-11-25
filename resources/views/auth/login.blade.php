@@ -15,29 +15,13 @@
     <link rel="stylesheet" href="{{ asset('administrator/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('administrator/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('administrator/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+
 </head>
 
 <body class="hold-transition login-page">
-    {{ isset($error) }}
-    @if (isset($error))
-        @push('handlejs')
-            <script>
-                $(function() {
-                    var Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                    });
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Action fail'
-                    })
-                })
-            </script>
-        @endpush
-    @endif
+
 
     <div class="login-box">
         <div class="login-logo">
@@ -105,6 +89,26 @@
     <script src="{{ asset('administrator/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('administrator/dist/js/adminlte.min.js') }}"></script>
+
+    <script src="{{ asset('administrator/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    @if (Session::has('error'))
+        <script>
+            $(document).ready(function() {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+                Toast.fire({
+                    icon: 'error',
+                    title: '{{ Session::get('error') }}'
+                })
+            })
+        </script>
+    @endif
 </body>
 
 </html>

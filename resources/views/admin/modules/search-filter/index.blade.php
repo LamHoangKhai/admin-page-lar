@@ -100,16 +100,9 @@
                 </thead>
 
                 <tbody id="renderData">
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><span class="right badge badge-"></span>
-                        </td>
-                        <td><span class="right badge badge- "></span>
-                        </td>
 
+                    <tr>
+                        <td>No result!</td>
                     </tr>
                 </tbody>
                 <tfoot>

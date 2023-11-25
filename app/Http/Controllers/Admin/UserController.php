@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\StoreRequest;
 use App\Http\Requests\Admin\User\UpdateRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -52,8 +53,28 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $data = User::findOrFail($id);
-        return view('admin.modules.user.edit', ["data" => $data, "id" => $id]);
+        $user = User::findOrFail($id);
+        $my_sefl = false;
+        if (Auth::user()->id == $id) {
+            $my_sefl = true;
+        }
+
+        $permission = true;
+
+        if (Auth::user()->id != "9ab0345b-59de-4d6f-85ac-091cfc88204d" && ($user["level"] == 2 && !$my_sefl)) {
+            $permission = false;
+        }
+        if (Auth::user()->id != "9ab0345b-59de-4d6f-85ac-091cfc88204d" && $id == "9ab0345b-59de-4d6f-85ac-091cfc88204d") {
+            $permission = false;
+        }
+
+
+        if ($permission) {
+            return view('admin.modules.user.edit', ["data" => $user, "id" => $id]);
+        } else {
+            return redirect()->route("admin.user.index")->with("error", "Not permision edit!");
+        }
+
     }
 
     /**

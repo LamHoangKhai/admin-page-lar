@@ -69,14 +69,9 @@ class SearchFilterController extends Controller
         if ($featured) {
             $query = $query->whereIn("featured", $featured);
         }
-        if ($page > 1) {
-            $skip = ($page * $take) - $take;
-        }
 
-        $countData = $query->count();
-        $data = $query->skip($skip)->take($take)->get();
-
-        return response()->json(['status_code' => 200, 'msg' => "Kết nối thành công nha bạn.", "data" => $data, "amountOfData" => $countData]);
+        $data = $query->paginate($take);
+        return response()->json(['status_code' => 200, 'msg' => "Kết nối thành công nha bạn.", "data" => $data]);
 
     }
 

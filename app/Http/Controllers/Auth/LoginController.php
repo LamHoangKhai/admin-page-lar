@@ -14,10 +14,14 @@ class LoginController extends Controller
      */
     public function showLogin()
     {
+        if (Auth::check()) {
+            return redirect()->route("admin.home");
+        }
         return view("auth.login");
     }
     public function login(LoginRequest $request)
     {
+
         $credentials = [
             "email" => $request->email,
             "password" => $request->password,
@@ -27,7 +31,7 @@ class LoginController extends Controller
             return redirect()->route('admin.category.index')->with('success', "Login success");
         }
 
-        return redirect()->back()->with("error", "Login fail");
+        return redirect()->route("showLogin")->with("error", "Login fail");
     }
     /**
      * Show the form for creating a new resource.

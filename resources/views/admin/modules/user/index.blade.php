@@ -66,7 +66,9 @@
                         <th>Status</th>
                         <th>Create At</th>
                         <th>Update At</th>
-                        <th>Action</th>
+                        @if (Auth::user()->level == 2)
+                            <th>Action</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -78,7 +80,7 @@
                             <td>{{ $user->full_name }}</td>
                             <td>{{ $user->phone }}</td>
                             <td><span
-                                    class="right badge badge-{{ $user->level == 1 ? 'primary' : 'dark' }}">{{ $user->level == 1 ? 'Member' : 'Admin' }}</span>
+                                    class="right badge badge-{{ $user->level == 1 ? 'primary' : ($user->level == 2 && $user->id == '9ab0345b-59de-4d6f-85ac-091cfc88204d' ? 'danger' : 'dark') }}">{{ $user->level == 1 ? 'Member' : ($user->level == 2 && $user->id == '9ab0345b-59de-4d6f-85ac-091cfc88204d' ? 'Superadmin' : 'Admin') }}</span>
                             </td>
                             <td>
                                 <span class="right badge badge-{{ $user->status === 1 ? 'success' : 'warning' }}">
@@ -92,16 +94,19 @@
                             <td>
                                 {{ date('d/m/Y  H:i:s', strtotime($user->updated_at)) }}
                             </td>
+                            @if (Auth::user()->level == 2)
+                                <td class="min-width">
+                                    <div class="flex">
+                                        <a href="{{ route('admin.user.edit', ['id' => $user->id]) }}"
+                                            class="text-dark btn btn-warning">Edit</a>
+                                        <a data-url="{{ route('admin.user.destroy', ['id' => $user->id]) }}"
+                                            class="text-white btn btn-danger confirm"
+                                            value="{{ $user->email }}">Delete</a>
+                                    </div>
 
-                            <td class="min-width">
-                                <div class="flex">
-                                    <a href="{{ route('admin.user.edit', ['id' => $user->id]) }}"
-                                        class="text-dark btn btn-warning">Edit</a>
-                                    <a data-url="{{ route('admin.user.destroy', ['id' => $user->id]) }}"
-                                        class="text-white btn btn-danger confirm" value="{{ $user->email }}">Delete</a>
-                                </div>
+                                </td>
+                            @endif
 
-                            </td>
 
                         </tr>
                     @endforeach
@@ -117,7 +122,9 @@
                         <th>Status</th>
                         <th>Create At</th>
                         <th>Update At</th>
-                        <th>Action</th>
+                        @if (Auth::user()->level == 2)
+                            <th>Action</th>
+                        @endif
                     </tr>
                 </tfoot>
             </table>

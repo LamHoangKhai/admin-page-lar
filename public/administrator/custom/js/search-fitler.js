@@ -6,7 +6,7 @@ $(document).ready(() => {
         category_id: "",
         page: 0,
         take: 25,
-        amountOfData: 0,
+        totalData: 0,
         totalPage: 1,
         url: $("#url").data("url"),
     };
@@ -89,7 +89,6 @@ $(document).ready(() => {
         pageChange: function (page) {
             storage.page = parseInt(page);
             this.currentPage = storage.page;
-            console.log(page);
             loadSearchFilter(storage);
         },
     });
@@ -125,10 +124,12 @@ const debounce = (callback, timeout = 500) => {
 
 // set total page
 const setTotalPages = (storage) => {
-    storage.totalPage = Math.round(storage.amountOfData / storage.take);
+    storage.totalPage = storage.totalData
+        ? Math.ceil(storage.totalData / storage.take)
+        : 1;
     $("#pagination").simplePaginator("setTotalPages", storage.totalPage);
     $(".totalpage").text(
-        `Showing ${storage.page} to ${storage.totalPage} of ${storage.amountOfData} entries`
+        `Page ${storage.page} to ${storage.totalPage} total page of ${storage.totalData} entries`
     );
 };
 // end handle pagination
@@ -150,18 +151,26 @@ const loadSearchFilter = (storage) => {
         dataType: "json",
         success: (res) => {
             let xhtml = "";
-            let data = res.data || [];
-            data.forEach((element) => {
-                let status =
-                    element.status === 1
-                        ? ["Show", "success"]
-                        : ["Hidden", "secondary"];
-                let featured =
-                    element.featured === 1
-                        ? ["Featured", "primary"]
-                        : ["Unfeatured", "danger"];
-
+            let data = res.data.data || [];
+            console.log(res.data);
+            if (data.length === 0) {
                 xhtml += `
+                <tr>
+                <td class="text-red">No result!</td>
+                </tr>
+                `;
+            } else {
+                data.forEach((element) => {
+                    let status =
+                        element.status === 1
+                            ? ["Show", "success"]
+                            : ["Hidden", "secondary"];
+                    let featured =
+                        element.featured === 1
+                            ? ["Featured", "primary"]
+                            : ["Unfeatured", "danger"];
+
+                    xhtml += `
             <tr>
             <td>${element.id}</td>
             <td>${element.name}</td>
@@ -173,9 +182,10 @@ const loadSearchFilter = (storage) => {
             </td>
             </tr>
             `;
-            });
+                });
+            }
             $("#renderData").append(xhtml);
-            storage.amountOfData = res.amountOfData;
+            storage.totalData = res.data.total;
             setTotalPages(storage);
         },
         error: function (error) {
