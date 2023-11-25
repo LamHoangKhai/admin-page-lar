@@ -21,7 +21,11 @@
             <div class="info">
                 <span>
                     <h5 style="color:white" class="mb-0">
-                        {{ Auth::user()->full_name }}
+                        @if (isset(Auth::user()->full_name))
+                            {{ Auth::user()->full_name }}
+                        @else
+                            ""
+                        @endif
 
                     </h5>
                     <a href="{{ route('logout') }} " class="nav-link text-primary">
