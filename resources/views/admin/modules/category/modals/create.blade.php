@@ -40,6 +40,7 @@
                             <label>Category parent</label>
                             <select class="form-control" name="parent_id">
                                 <option value="0">----- Root -----</option>
+                                
                             </select>
                         </div>
 

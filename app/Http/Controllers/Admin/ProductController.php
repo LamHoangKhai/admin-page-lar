@@ -7,7 +7,9 @@ use App\Http\Requests\Admin\Product\StoreRequest;
 use App\Http\Requests\Admin\Product\UpdateRequest;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\User;
+use App\Models\ProductImage;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -29,26 +31,31 @@ class ProductController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $product = new Product();
 
-        $image = $request->image;
-        $filename = time() . "." . $image->getClientOriginalName();
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->content = $request->content;
+        $product->status = $request->status;
+        $product->featured = $request->featured;
+        $product->category_id = $request->category_id;
+        $product->user_id = Auth::user()->id;
+        $product->save();
 
+        if (count($request->images) > 0) {
+            $data_images = [];
+            foreach ($request->images as $image_detail) {
+                $filename = rand(1, 10000) . time() . "." . $image_detail->getClientOriginalName();
+                $image_detail->move(public_path("uploads"), $filename);
+                $data_images[] = [
+                    "images" => $filename,
+                    "product_id" => $product->id,
+                ];
 
-
-        $users = User::all();
-
-        Product::create([
-            "name" => $request->name,
-            "price" => $request->price,
-            "description" => $request->description,
-            "content" => $request->content,
-            "status" => $request->status,
-            "featured" => $request->featured,
-            "category_id" => $request->category_id,
-            "user_id" => $users[0]->id,
-            "image" => $filename
-        ]);
-        $image->move(public_path("uploads"), $filename);
+            }
+            ProductImage::insert($data_images);
+        }
         return redirect()->route('admin.product.index')->with('success', "Create product success");
     }
     /**
@@ -64,7 +71,7 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $data = Product::findOrFail($id);
+        $data = Product::with("product_images")->findOrFail($id);
         $categories = Category::all();
         return view('admin.modules.product.edit', ["data" => $data, "id" => $id, "categories" => $categories]);
     }
@@ -74,7 +81,7 @@ class ProductController extends Controller
      */
     public function update(UpdateRequest $request, string $id)
     {
-        $dataCurrent = Product::findOrFailOrFail($id);
+        $dataCurrent = Product::findOrFail($id);
         $data = [
             "name" => $request->name,
             "price" => $request->price,
@@ -82,27 +89,22 @@ class ProductController extends Controller
             "content" => $request->content,
             "status" => $request->status,
             "featured" => $request->featured,
-            "category_id" => $request->category_id
+            "category_id" => $request->featured,
         ];
 
-        if (!empty($request->image)) {
-            $request->validate([
-                'image' => 'mimes:png,jpg'
-            ], [
-                'image.mimes' => 'Vui lòng chọn đúng loại file (png,jpg)'
-            ]);
-            $imageCurrent = public_path("uploads/") . $dataCurrent->image;
+        if (count($request->images) > 0) {
+            $data_images = [];
+            foreach ($request->images as $image_detail) {
+                $filename = rand(1, 10000) . time() . "." . $image_detail->getClientOriginalName();
+                $image_detail->move(public_path("uploads"), $filename);
+                $data_images[] = [
+                    "images" => $filename,
+                    "product_id" => $dataCurrent->id,
+                ];
 
-            if (file_exists($imageCurrent)) {
-                unlink($imageCurrent);
             }
-
-            $image = $request->image;
-            $filename = time() . "." . $image->getClientOriginalName();
-            $image->move(public_path("uploads"), $filename);
-            $data['image'] = $filename;
+            ProductImage::insert($data_images);
         }
-
         $dataCurrent->update($data);
 
 
@@ -123,5 +125,36 @@ class ProductController extends Controller
 
         $product->delete();
         return redirect()->route('admin.product.index')->with('success', 'Delete product success');
+    }
+
+    public function uploadFile(Request $request, $id)
+    {
+
+        $product_image = ProductImage::findOrFail($id);
+        $imageCurrent = public_path("uploads/") . $product_image->images;
+        if (file_exists($imageCurrent)) {
+            unlink($imageCurrent);
+        }
+
+        $file = $request->image;
+        $filename = time() . '.' . $file->getClientOriginalName();
+        $file->move(public_path("uploads"), $filename);
+
+        $product_image->images = $filename;
+        $product_image->save();
+        return response()->json(["success" => "Thành công"], 200);
+    }
+
+    public function deleteFile($id)
+    {
+
+        $product_image = ProductImage::findOrFail($id);
+        $imageCurrent = public_path("uploads/") . $product_image->images;
+        if (file_exists($imageCurrent)) {
+            unlink($imageCurrent);
+        }
+
+        $product_image->delete();
+        return response()->json(["success" => "Thành công"], 200);
     }
 }

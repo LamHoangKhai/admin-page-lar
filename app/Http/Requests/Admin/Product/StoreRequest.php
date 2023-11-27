@@ -24,8 +24,8 @@ class StoreRequest extends FormRequest
         return [
             "name" => "required|unique:products,name",
             "price" => "required|numeric",
-            "image" => "required|mimes:png,jpg",
-            //
+
+
         ];
     }
     public function messages()
@@ -35,8 +35,6 @@ class StoreRequest extends FormRequest
             "name.unique" => "Tên sản phẩm đã tồn tại",
             "price.required" => "Vui lòng nhập giá",
             "price.numeric" => "Vui lòng nhập số",
-            "image.required" => "Vui lòng upload hình",
-            "image.mimes" => "Vui lòng chọn đúng loại file (png,jpg)",
         ];
     }
 }

@@ -63,6 +63,11 @@ Route::prefix('admin')->name('admin.')->middleware('check_login')->group(functio
         Route::post('update/{id}', 'update')->name('update');
 
         Route::get('destroy/{id}', 'destroy')->name('destroy');
+
+        Route::post('upload-file/{id}', 'uploadFile')->name('uploadFile');
+        Route::get('delete-file/{id}', 'deleteFile')->name('deleteFile');
+
+
     });
 
     Route::prefix('user')->name('user.')->controller(UserController::class)->group(function () {

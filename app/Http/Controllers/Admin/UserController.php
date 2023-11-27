@@ -70,7 +70,7 @@ class UserController extends Controller
 
 
         if ($permission) {
-            return view('admin.modules.user.edit', ["data" => $user, "id" => $id]);
+            return view('admin.modules.user.edit', ["data" => $user, "id" => $id, "my_sefl" => $my_sefl]);
         } else {
             return redirect()->route("admin.user.index")->with("error", "Not permision edit!");
         }
@@ -113,8 +113,23 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         $user = User::findOrFail($id);
-        $user->status = 3;
-        $user->save();
-        return redirect()->route("admin.user.index")->with("success", "Delete user success");
+        $permission = false;
+
+
+        if (Auth::user()->id == "9ab0345b-59de-4d6f-85ac-091cfc88204d" && $user->id != "9ab0345b-59de-4d6f-85ac-091cfc88204d") {
+            $permission = true;
+        }
+        if ($user->level == 1) {
+            $permission = true;
+        }
+
+        if ($permission) {
+            $user->status = 3;
+            $user->save();
+            return redirect()->route("admin.user.index")->with("success", "Delete user success");
+        } else {
+            return redirect()->route("admin.user.index")->with("error", "Not permision delete!");
+        }
+
     }
 }

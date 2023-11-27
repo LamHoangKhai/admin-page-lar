@@ -30,10 +30,7 @@
                     <h4>Content</h4>
                     <textarea class="form-control " rows="4" style="font-size:1.2rem;background:white;" disabled>{{ $product->content }}</textarea>
                 </div>
-                <div>
-                    <h4>Image</h4>
-                    <img src="{{ asset('uploads/' . $product->image) }}" alt="" width="200px">
-                </div>
+
             </div>
             <div class="modal-footer">
                 <a href="{{ route('admin.product.edit', ['id' => $product->id]) }}"

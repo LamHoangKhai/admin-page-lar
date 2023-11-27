@@ -20,19 +20,99 @@
 @endpush
 @push('handlejs')
     <script>
-        function displaySelectedImage(event, elementId) {
-            const selectedImage = document.getElementById(elementId);
-            const fileInput = event.target;
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
 
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
+        $(document).ready(() => {
 
-                reader.onload = function(e) {
-                    selectedImage.src = e.target.result;
-                };
+            $(".file_old").change((e) => {
+                let file = e.target.files[0];
+                let number = e.target.getAttribute("data-image");
+                let url = $(`#urlUpdate`).attr("data-url");
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = (e) => {
+                        $(`#file_old-image-${number}`).attr("src", e.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                }
+                uploadImage(e.target.files[0], url);
+            })
 
-                reader.readAsDataURL(fileInput.files[0]);
-            }
+            $(".delete-image").click((e) => {
+                let imageNumner = e.target.getAttribute("data-image");
+                let url = $(`#deleteURL`).attr("data-url");
+                $("#image-" + imageNumner).closest(".col-md-2").remove();
+                deleteImage(url);
+            })
+
+            let countImage = 0
+            $("#add-image").click(() => {
+                countImage++;
+                let newInputImage = `<div class="col-md-2 mt-2 mr-2 p-0 newImg">
+                            <div class="w-100">
+                             <button type="button" class="bnt btn-danger  w-100 delete-image"
+                                 data-image="${countImage}"><i class="fas fa-minus"></i></button>
+                            </div>
+                              <div class="w-100 mt-1 mb-1"> <img
+                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaEOJh-qPS_3nv3Nj8kx59uWRtOSdLGvsYQg&usqp=CAU"
+                                   alt="" width="100%" height="150" id="image-${countImage}">
+                                   </div>
+                                 <div class=" w-100"><input type="file" name="images[]"
+                                    class="form-control w-100" data-image="${countImage}"></div>
+                                </div>`
+                $(".imageGroup").append(newInputImage)
+            })
+
+            $(".imageGroup").on("click", '.delete-image', (e) => {
+                let imageNumner = e.target.getAttribute("data-image");
+                $("#image-" + imageNumner).closest(".newImg").remove();
+            })
+
+            $(".imageGroup").on("change", 'input[name="images[]"]', (e) => {
+                let imageNumner = e.target.getAttribute("data-image");
+                var file = e.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = (e) => {
+                        $(`#image-${imageNumner}`).attr("src", e.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            })
+
+        });
+        const deleteImage = (url) => {
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: (res) => {
+                    console.log(res);
+                },
+                error: function(error) {
+                    console.log(error.message);
+                },
+            });
+        }
+        const uploadImage = (file, url) => {
+            let formData = new FormData();
+            formData.append('image', file);
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: (res) => {
+                    console.log(res);
+                },
+                error: function(error) {
+                    console.log(error.message);
+                },
+            });
         }
     </script>
 @endpush
@@ -91,18 +171,10 @@
                             <div class="col-md-6 margin-right-4">
                                 <label>Status</label>
                                 <select class="form-control" name="status">
-                                    <option value="1"
-                                        {{ old('status', $data->status) == 1
-                                            ? 'selected
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                selected'
-                                            : '' }}>
+                                    <option value="1" {{ old('status', $data->status) == 1 ? 'selected' : '' }}>
                                         Show
                                     </option>
-                                    <option value="2"
-                                        {{ old('status', $data->status) == 2
-                                            ? 'selected
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                selected'
-                                            : '' }}">
+                                    <option value="2" {{ old('status', $data->status) == 2 ? 'selected' : '' }}>
                                         Hidden
                                     </option>
                                 </select>
@@ -111,18 +183,10 @@
                             <div class="col-md-6">
                                 <label>Featured</label>
                                 <select class="form-control" name="featured">
-                                    <option value="1"
-                                        {{ old('featured', $data->featured) == 1
-                                            ? 'selected
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                selected'
-                                            : '' }}>
+                                    <option value="1" {{ old('featured', $data->featured) == 1 ? 'selected' : '' }}>
                                         Featured
                                     </option>
-                                    <option
-                                        value="2"{{ old('featured', $data->featured) == 2
-                                            ? 'selected
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                selected'
-                                            : '' }}>
+                                    <option value="2"{{ old('featured', $data->featured) == 2 ? 'selected' : '' }}>
                                         UnFeatured
                                     </option>
                                 </select>
@@ -140,27 +204,53 @@
                             <textarea class="form-control" rows="4" name="content">{{ old('content', $data->content) }}</textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label>Image</label>
-                            <div class="mb-4">
-                                <img id="selectedImage" src='{{ asset('uploads/' . $data->image) }}'
-                                    alt="example placeholder" style="width: 120px;" name="currentImage" />
-                            </div>
-                            @if ($errors->has('image'))
-                                <p class="invalid-feedback" style="display: block">*
-                                    {{ $errors->get('image')[0] }}
-                                <p>
-                            @endif
-                        </div>
 
                         <div class="form-group">
-                            <div class="btn btn-dark btn-rounded">
-                                <label class="form-label text-white m-1" for="customFile1">Choose
-                                    file</label>
-                                <input type="file" class="form-control d-none" id="customFile1"
-                                    onchange="displaySelectedImage(event, 'selectedImage')" name="image" />
+                            <label>Current Images</label>
+                            <div class="d-flex gap-auto  flex-wrap imageGroup-old w-100 ">
+                                @foreach ($data->product_images as $item)
+                                    <div class="col-md-2 mt-2 mr-2 p-0">
+                                        <input type="hidden" id="updateURL"
+                                            data-url="{{ route('admin.product.uploadFile', ['id' => $item->id]) }}">
+                                        <input type="hidden" id="deleteURL"
+                                            data-url="{{ route('admin.product.deleteFile', ['id' => $item->id]) }}">
+
+                                        <div class="w-100">
+                                            <button type="button" class="bnt btn-danger  w-100 delete-image"
+                                                data-image="{{ $item->id }}"><i class="fas fa-minus"></i></button>
+                                        </div>
+
+                                        <div class="w-100 mt-1 mb-1"> <img src="{{ asset('uploads/' . $item->images) }}"
+                                                alt="{{ $item->id }}" width="100%" height="150"
+                                                id="file_old-image-{{ $item->id }}">
+                                        </div>
+
+                                        <div class=" w-100"><input type="file" name="images_old"
+                                                class="form-control w-100 file_old" data-image="{{ $item->id }}">
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                            </div>
+                            <label class="mt-2">Add Images</label>
+                            <div class="d-flex gap-auto  flex-wrap imageGroup w-100 ">
+
+
+                            </div>
+                            @if ($errors->has('images'))
+                                <p class="invalid-feedback" style="display: block">*
+                                    {{ $errors->get('images')[0] }}
+                                <p>
+                            @endif
+
+
+                            <div class="row mt-2 col-md-2">
+                                <button type="button" class="btn btn-info w-100" id="add-image"><i class="fas fa-plus"></i>
+                                    Add image detaile</button>
                             </div>
                         </div>
+
+
                     </div>
 
                 </div>

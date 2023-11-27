@@ -32,7 +32,7 @@
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
 
-                <form action="" method="post">
+                <form action="{{ route('login') }}" method="post">
                     @csrf
                     <div class="input-group mb-3">
                         <input type="email" class="form-control" name="email" placeholder="Email">
@@ -41,7 +41,7 @@
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
-                        @if ($errors->has('email'))
+                        @if (isset($errors) && $errors->has('email'))
                             <p class="invalid-feedback" style="display: block">*
                                 {{ $errors->get('email')[0] }}
                             <p>
@@ -54,7 +54,7 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
-                        @if ($errors->has('password'))
+                        @if (isset($errors) && $errors->has('password'))
                             <p class="invalid-feedback" style="display: block">*
                                 {{ $errors->get('password')[0] }}
                             <p>

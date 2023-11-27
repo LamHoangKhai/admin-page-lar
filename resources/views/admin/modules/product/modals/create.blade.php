@@ -14,6 +14,48 @@
         }
     </style>
 @endpush
+@push('handlejs')
+    <script>
+        $(document).ready(() => {
+            let countImage = 0
+            $("#add-image").click(() => {
+                countImage++;
+                let newInputImage = `<div class="col-md-3 mt-2">
+                            <div class="w-100">
+                             <button type="button" class="bnt btn-danger  w-100 delete-image"
+                                 data-image="${countImage}"><i class="fas fa-minus"></i></button>
+                            </div>
+                              <div class="w-100 mt-1 mb-1"> <img
+                                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaEOJh-qPS_3nv3Nj8kx59uWRtOSdLGvsYQg&usqp=CAU"
+                                   alt="" width="100%" height="150" id="image-${countImage}">
+                                   </div>
+                                 <div class=" w-100"><input type="file" name="images[]"
+                                    class="form-control w-100" data-image="${countImage}"></div>
+                                </div>`
+                $(".imageGroup").append(newInputImage)
+            })
+
+            $(".imageGroup").on("click", '.delete-image', (e) => {
+                let imageNumner = e.target.getAttribute("data-image");
+                $("#image-" + imageNumner).closest(".col-md-3").remove();
+            })
+
+            $(".imageGroup").on("change", 'input[name="images[]"]', (e) => {
+                let imageNumner = e.target.getAttribute("data-image");
+                var file = e.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = (e) => {
+                        $(`#image-${imageNumner}`).attr("src", e.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            })
+
+        })
+    </script>
+@endpush
+
 @if ($errors->any())
     @push('handlejs')
         <script>
@@ -114,33 +156,32 @@
 
 
                             <div class="form-group">
-                                <label>Image</label>
-                                <div class="mb-4">
-                                    <img id="selectedImage"
-                                        src='https://mdbootstrap.com/img/Photos/Others/placeholder.jpg'
-                                        alt="example placeholder" style="width: 120px;" />
+                                <label>Images</label>
+
+
+                                <div class="d-flex gap-auto  flex-wrap imageGroup w-100 ">
+
+
                                 </div>
-                                @if ($errors->has('image'))
+                                @if ($errors->has('images'))
                                     <p class="invalid-feedback" style="display: block">*
-                                        {{ $errors->get('image')[0] }}
+                                        {{ $errors->get('images')[0] }}
                                     <p>
                                 @endif
-                            </div>
-                            <div class="form-group">
-                                <div class="btn btn-dark btn-rounded">
-                                    <label class="form-label text-white m-1" for="customFile1">Choose
-                                        file</label>
-                                    <input type="file" class="form-control d-none" id="customFile1"
-                                        onchange="displaySelectedImage(event, 'selectedImage')" name="image" />
+
+
+                                <div class="row mt-1">
+                                    <button type="button" class="btn btn-info w-100" id="add-image"><i
+                                            class="fas fa-plus"></i> Add image detaile</button>
                                 </div>
                             </div>
+
+
                         </div>
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -15,13 +15,13 @@ class CategoryController extends Controller
     public function index()
     {
         $data = Category::orderBy('created_at', 'DESC')->get();
-
         return view('admin.modules.category.index', ["categories" => $data]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
+
 
 
     /**

@@ -101,9 +101,7 @@
 
                 <tbody id="renderData">
 
-                    <tr>
-                        <td>No result!</td>
-                    </tr>
+
                 </tbody>
                 <tfoot>
 
@@ -124,7 +122,7 @@
                 <div>
                     <p class="totalpage mb-1">
                     </p>
-                    <p>Move page <input type="number" id="movePage" /></p>
+                    <p>Go to page : <input type="number" id="movePage" /></p>
                 </div>
 
                 <div id="pagination" class="text-center pt-3"></div>

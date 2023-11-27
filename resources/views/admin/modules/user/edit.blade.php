@@ -62,13 +62,16 @@
                         <div class="form-group">
                             <label>Level</label>
 
-                            <select class="form-control" name="level">
-                                <option value="1" {{ old('level', $data->level) == 1 ? 'selected' : '' }}>Member
-                                </option>
-
-                                <option value="2" {{ old('level', $data->level) == 2 ? 'selected' : '' }}>Admin
-                                </option>
-
+                            <select class="form-control" name="level"
+                                {{ isset($my_sefl) && !$my_sefl ? '' : 'disabled' }}>
+                                @if (isset($my_sefl) && !$my_sefl)
+                                    <option value="1" {{ old('level', $data->level) == 1 ? 'selected' : '' }}>Member
+                                    </option>
+                                    <option value="2" {{ old('level', $data->level) == 2 ? 'selected' : '' }}>Admin
+                                    </option>
+                                @else
+                                    <option> No change</option>
+                                @endif
                             </select>
                         </div>
 

@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->integer('price')->default(100000);
             $table->mediumText('description');
             $table->text('content')->nullable();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->tinyInteger('status');
             $table->tinyInteger('featured');
             $table->unsignedBigInteger('category_id');
