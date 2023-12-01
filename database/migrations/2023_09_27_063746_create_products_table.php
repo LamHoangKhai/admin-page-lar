@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->integer('price')->default(100000);
-            $table->mediumText('description');
+            $table->text('description')->nullable();
             $table->text('content')->nullable();
             $table->string('image')->nullable();
             $table->tinyInteger('status');

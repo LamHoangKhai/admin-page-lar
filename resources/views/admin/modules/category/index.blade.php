@@ -49,7 +49,6 @@
                 Category</button>
         </div>
 
-        @include('admin.modules.category.modals.create')
 
 
         {{-- Render data --}}
@@ -59,6 +58,7 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
+                        <th>Parent</th>
                         <th>Status</th>
                         <th>Create At</th>
                         <th>Update At</th>
@@ -70,7 +70,17 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $category->name }}</td>
-
+                            <td>
+                                @php
+                                    if ($category->parent_id != 0) {
+                                        $parent_category = DB::table('categories')
+                                            ->select('name')
+                                            ->where('id', $category->parent_id)
+                                            ->get();
+                                        echo $parent_category[0]->name;
+                                    }
+                                @endphp
+                            </td>
                             <td><span
                                     class="right badge badge-{{ $category->status == 1 ? 'success' : 'secondary' }}">{{ $category->status == 1 ? 'Show' : 'Hidden' }}</span>
                             </td>
@@ -96,6 +106,7 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
+                        <th>Parent</th>
                         <th>Status</th>
                         <th>Create At</th>
                         <th>Update At</th>
@@ -103,6 +114,8 @@
                     </tr>
                 </tfoot>
             </table>
+
+            @include('admin.modules.category.modals.create')
             {{-- End Render data --}}
         </div>
     </div>

@@ -15,6 +15,7 @@
     </style>
 @endpush
 @push('handlejs')
+
     <script>
         $(document).ready(() => {
             let countImage = 0
@@ -52,7 +53,11 @@
                 }
             })
 
+
+
         })
+        $("#description").summernote();
+        $("#content").summernote();
     </script>
 @endpush
 
@@ -104,13 +109,16 @@
                                 </div>
 
                                 <div class="w-50">
+
                                     <label>Categories</label>
                                     <select name="category_id" class="form-control">
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}"
-                                                {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                                {{ $category->name }}</option>
-                                        @endforeach
+                                        @if (count($categories) === 0)
+                                            <option value="0">--Root--</option>
+                                        @else
+                                            @php
+                                                RootCategory($categories, old('category_id', 0));
+                                            @endphp
+                                        @endif
                                     </select>
                                 </div>
 
@@ -145,12 +153,13 @@
 
                             <div class="form-group">
                                 <label>Description</label>
-                                <textarea class="form-control" rows="3" name="description">{{ old('description') }}</textarea>
+                                <textarea class="form-control" rows="3" id="description" name="description">{{ old('description') }}</textarea>
+                                <script></script>
                             </div>
 
                             <div class="form-group">
                                 <label>Content</label>
-                                <textarea class="form-control" rows="3" name="content">{{ old('content') }}</textarea>
+                                <textarea class="form-control" rows="3" id="content" name="content">{{ old('content') }}</textarea>
                             </div>
 
 

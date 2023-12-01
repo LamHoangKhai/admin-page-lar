@@ -52,7 +52,8 @@ class CategoryController extends Controller
     public function edit(string $id)
     {
         $data = Category::findOrFail($id);
-        return view('admin.modules.category.edit', ["id" => $id, "data" => $data]);
+        $categories = Category::get();
+        return view('admin.modules.category.edit', ["id" => $id, "data" => $data, "categories" => $categories]);
     }
 
     /**

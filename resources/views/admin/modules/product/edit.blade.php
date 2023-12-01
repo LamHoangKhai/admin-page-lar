@@ -19,6 +19,7 @@
     </style>
 @endpush
 @push('handlejs')
+    <script src="{{ asset('administrator/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <script>
         $.ajaxSetup({
             headers: {
@@ -114,6 +115,8 @@
                 },
             });
         }
+        $("#description").summernote();
+        $("#content").summernote();
     </script>
 @endpush
 @section('content')
@@ -158,11 +161,13 @@
                             <div class="w-50">
                                 <label>Categories</label>
                                 <select name="category_id" class="form-control">
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}"
-                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                            {{ $category->name }}</option>
-                                    @endforeach
+                                    @if (count($categories) === 0)
+                                        <option value="0">--Root--</option>
+                                    @else
+                                        @php
+                                            RootCategory($categories, old('category_id', 0));
+                                        @endphp
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -196,12 +201,12 @@
 
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea class="form-control" rows="4"name="description">{{ old('description', $data->description) }}</textarea>
+                            <textarea class="form-control" rows="4" id="description" name="description">{{ old('description', $data->description) }}</textarea>
                         </div>
 
                         <div class="form-group">
                             <label>Content</label>
-                            <textarea class="form-control" rows="4" name="content">{{ old('content', $data->content) }}</textarea>
+                            <textarea class="form-control" rows="4" id="content" name="content">{{ old('content', $data->content) }}</textarea>
                         </div>
 
 

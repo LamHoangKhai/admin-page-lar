@@ -92,7 +92,7 @@ class ProductController extends Controller
             "category_id" => $request->featured,
         ];
 
-        if (count($request->images) > 0) {
+        if (is_array($request->images) && count($request->images) > 0) {
             $data_images = [];
             foreach ($request->images as $image_detail) {
                 $filename = rand(1, 10000) . time() . "." . $image_detail->getClientOriginalName();

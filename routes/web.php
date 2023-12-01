@@ -37,7 +37,7 @@ Route::get('/search', function () {
 })->name("showSearch");
 
 
-Route::prefix('admin')->name('admin.')->middleware('check_login')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name("home");
 
     Route::prefix('category')->name('category.')->controller(CategoryController::class)->group(function () {

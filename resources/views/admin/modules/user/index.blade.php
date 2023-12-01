@@ -66,9 +66,9 @@
                         <th>Status</th>
                         <th>Create At</th>
                         <th>Update At</th>
-                        @if (Auth::user()->level == 2)
-                            <th>Action</th>
-                        @endif
+
+                        <th>Action</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -94,18 +94,15 @@
                             <td>
                                 {{ date('d/m/Y  H:i:s', strtotime($user->updated_at)) }}
                             </td>
-                            @if (Auth::user()->level == 2)
-                                <td class="min-width">
-                                    <div class="flex">
-                                        <a href="{{ route('admin.user.edit', ['id' => $user->id]) }}"
-                                            class="text-dark btn btn-warning">Edit</a>
-                                        <a data-url="{{ route('admin.user.destroy', ['id' => $user->id]) }}"
-                                            class="text-white btn btn-danger confirm"
-                                            value="{{ $user->email }}">Delete</a>
-                                    </div>
+                            <td>
+                                <div class="flex">
+                                    <a href="{{ route('admin.user.edit', ['id' => $user->id]) }}"
+                                        class="text-dark btn btn-warning">Edit</a>
+                                    <a data-url="{{ route('admin.user.destroy', ['id' => $user->id]) }}"
+                                        class="text-white btn btn-danger confirm" value="{{ $user->email }}">Delete</a>
+                                </div>
+                            </td>
 
-                                </td>
-                            @endif
 
 
                         </tr>
@@ -122,9 +119,9 @@
                         <th>Status</th>
                         <th>Create At</th>
                         <th>Update At</th>
-                        @if (Auth::user()->level == 2)
-                            <th>Action</th>
-                        @endif
+
+                        <th>Action</th>
+
                     </tr>
                 </tfoot>
             </table>

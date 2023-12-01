@@ -40,9 +40,18 @@
                             <label>Category parent</label>
                             <select class="form-control" name="parent_id">
                                 <option value="0">----- Root -----</option>
+                                <?php
                                 
+                                RootCategory($categories, old('parent_id', 0));
+                                ?>
+
+
+
                             </select>
+
+
                         </div>
+
 
                         <div class="form-group">
                             <label>Category name</label>

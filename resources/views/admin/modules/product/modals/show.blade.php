@@ -24,11 +24,11 @@
                 <hr>
                 <div>
                     <h4>Description</h4>
-                    <textarea class="form-control" rows="4" style="font-size:1.2rem;background:white;" disabled>{{ $product->description }}</textarea>
+                    {!! $product->description !!}
                 </div>
                 <div>
                     <h4>Content</h4>
-                    <textarea class="form-control " rows="4" style="font-size:1.2rem;background:white;" disabled>{{ $product->content }}</textarea>
+                    {!! $product->content !!}
                 </div>
 
             </div>

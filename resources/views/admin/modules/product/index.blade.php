@@ -23,10 +23,11 @@
     <script src="{{ asset('administrator/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('administrator/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('administrator/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <script src="{{ asset('administrator/plugins/summernote/summernote-bs4.min.js') }}"></script>
 @endpush
 
 @push('handlejs')
-    <script defer>
+    <script>
         $(function() {
             $("#example1").DataTable({
                 "responsive": true,
@@ -52,10 +53,10 @@
         });
 
         // $(document).ready(() => {
-        //     $(".page-link").click((e) => {
-        //         e.preventDefault();
-        //         window.history.pushState(e.target.href, "New Page", e.target.href);
-        //     })
+        // $(".page-link").click((e) => {
+        // e.preventDefault();
+        // window.history.pushState(e.target.href, "New Page", e.target.href);
+        // })
         // })
     </script>
 @endpush
